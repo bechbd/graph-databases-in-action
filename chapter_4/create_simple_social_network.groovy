@@ -1,4 +1,5 @@
 //Connects the Gremlin Session to the "remote" Gremlin Server
+// and runs this in a session instead of the default "sessionless" mode
 :remote connect tinkerpop.server conf/remote.yaml session
 //Sets Gremlin Console into "remote" mode so that each command is run on the server
 :remote console
