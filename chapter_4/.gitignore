@@ -9,6 +9,8 @@
 .idea/**/shelf
 
 .idea/
+target/
+*.iml
 
 # Generated files
 .idea/**/contentModel.xml
