@@ -1,0 +1,25 @@
+restaurant_id, restaurant_name, cuisine_name
+1,Rare Bull,steakhouse
+2,Good Bull,roadhouse
+3,Rabbitfood,vegan
+4,Quick N Greasy,short order
+5,Breaded & Fried,comfort food
+6,Super Delish,fine dining
+7,Eastern Winds,Chinese
+8,Southern Fire,Mexican
+9,Northern Quench,bar
+10,Western Granola,vegan
+11,All Night Long,diner
+12,Black Pit of Des Pair,coffee
+13,Saucy-Cheesy-Saucers,pizza
+14,With Pasta,Italian
+15,With Salsa,Mexican
+16,With Curry,Indian
+17,With Rice & Noodles,Chinese
+18,Without Heat,Sushi
+19,With Ginger,Thai
+20,With Beer,German
+21,With Wine,French
+22,With Shell,Tacos
+23,With Sauce,Pizza
+24,Without Chaser,bar
