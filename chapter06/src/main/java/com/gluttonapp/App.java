@@ -42,11 +42,10 @@ public class App {
             switch (option) {
                 case 0:
                     break;
-// TODO: s6.4
-//                case 1:
-//                    //Get Vertex Count
-//                    System.out.println(getVertexCount(g));
-//                    break;
+                case 1:
+                    //Get Vertex Count
+                    System.out.println("Vertex count: " + getVertexCount(g));
+                    break;
 // TODO: s6.4
 //                case 2:
 //                    //Get Edge Count
@@ -103,9 +102,10 @@ public class App {
 
         int option = -1;
         Scanner keyboard = new Scanner(System.in);
+        System.out.println();
         System.out.println("Main Menu:");
         System.out.println("--------------");
-//        System.out.println("1) Get Count of the Vertices");
+        System.out.println("1) Get Count of the Vertices");
 //        System.out.println("2) Get Count of the Edges");
 //        System.out.println("3) Get person Vertex");
 // TODO: s6.5
@@ -137,10 +137,9 @@ public class App {
         return traversal().withRemote(DriverRemoteConnection.using(cluster));
     }
 
-// TODO: s6.4
-//    public static Long getVertexCount(GraphTraversalSource g) {
-//        return g.V().count().next();
-//    }
+    public static Long getVertexCount(GraphTraversalSource g) {
+        return g.V().count().next();
+    }
 
 // TODO: s6.4
 //    public static Long getEdgeCount(GraphTraversalSource g) {
