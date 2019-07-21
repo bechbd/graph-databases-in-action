@@ -2,10 +2,9 @@ package com.gluttonapp;
 
 // TODO: s6.6
 //import org.apache.commons.lang3.StringUtils;
-// TODO: s6.3
-//import org.apache.tinkerpop.gremlin.driver.Cluster;
-//import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
-//import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
+import org.apache.tinkerpop.gremlin.driver.Cluster;
+import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 // TODO: s6.5
 //import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
 //import org.apache.tinkerpop.gremlin.structure.Edge;
@@ -15,8 +14,7 @@ package com.gluttonapp;
 //import java.util.List;
 import java.util.Scanner;
 
-// TODO: s6.3
-//import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
+import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
 // TODO: s6.6
 //import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.both;
 //import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.has;
@@ -25,22 +23,20 @@ import java.util.Scanner;
 public class App {
 
     public static void main( String[] args ) {
-// TODO: s6.3
-//        Cluster cluster = connectToDatabase();
-//        System.out.println("Using cluster connection: " + cluster.toString());
-//        GraphTraversalSource g = getGraphTraversalSource(cluster);
-//        System.out.println("Using traversal source: " + g.toString());
+        Cluster cluster = connectToDatabase();
+        System.out.println("Using cluster connection: " + cluster.toString());
+        GraphTraversalSource g = getGraphTraversalSource(cluster);
+        System.out.println("Using traversal source: " + g.toString());
 
 // TODO: s6.4
 //        displayMenu(g);
         displayMenu();
 
-// TODO: s6.3
-//        cluster.close();
+        cluster.close();
         System.exit(0);
     }
 
-// TODO: s6.3
+// TODO: s6.4
 //    public static void displayMenu(raphTraversalSource g) {
     public static void displayMenu() {
         int option = -1;
@@ -134,19 +130,17 @@ public class App {
         return option;
     }
 
-// TODO: s6.3
-//    public static Cluster connectToDatabase() {
-//        Cluster.Builder builder = Cluster.build();
-//        builder.addContactPoint("localhost");
-//        builder.port(8182);
-//
-//        return builder.create();
-//    }
+    public static Cluster connectToDatabase() {
+        Cluster.Builder builder = Cluster.build();
+        builder.addContactPoint("localhost");
+        builder.port(8182);
 
-// TODO: s6.3
-//    public static GraphTraversalSource getGraphTraversalSource(Cluster cluster) {
-//        return traversal().withRemote(DriverRemoteConnection.using(cluster));
-//    }
+        return builder.create();
+    }
+
+    public static GraphTraversalSource getGraphTraversalSource(Cluster cluster) {
+        return traversal().withRemote(DriverRemoteConnection.using(cluster));
+    }
 
 // TODO: s6.4
 //    public static Long getVertexCount(GraphTraversalSource g) {
