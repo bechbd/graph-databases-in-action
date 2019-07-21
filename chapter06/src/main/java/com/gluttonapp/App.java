@@ -46,11 +46,10 @@ public class App {
                     //Get Vertex Count
                     System.out.println("Vertex count: " + getVertexCount(g));
                     break;
-// TODO: s6.4
-//                case 2:
-//                    //Get Edge Count
-//                    System.out.println(getEdgeCount(g));
-//                    break;
+                case 2:
+                    //Get Edge Count
+                    System.out.println("Edge count: " + getEdgeCount(g));
+                    break;
 // TODO: s6.4
 //                case 3:
 //                    //Get Person
@@ -106,7 +105,7 @@ public class App {
         System.out.println("Main Menu:");
         System.out.println("--------------");
         System.out.println("1) Get Count of the Vertices");
-//        System.out.println("2) Get Count of the Edges");
+        System.out.println("2) Get Count of the Edges");
 //        System.out.println("3) Get person Vertex");
 // TODO: s6.5
 //        System.out.println("4) Add person Vertex");
@@ -141,10 +140,9 @@ public class App {
         return g.V().count().next();
     }
 
-// TODO: s6.4
-//    public static Long getEdgeCount(GraphTraversalSource g) {
-//        return g.E().count().next();
-//    }
+    public static Long getEdgeCount(GraphTraversalSource g) {
+        return g.E().count().next();
+    }
 
 // TODO: s6.4
 //    public static String getPerson(GraphTraversalSource g) {
