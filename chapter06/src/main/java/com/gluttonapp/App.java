@@ -10,8 +10,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 //import org.apache.tinkerpop.gremlin.structure.Edge;
 //import org.apache.tinkerpop.gremlin.structure.Vertex;
 
-// TODO: s6.4
-//import java.util.List;
+import java.util.List;
 import java.util.Scanner;
 
 import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
@@ -50,11 +49,10 @@ public class App {
                     //Get Edge Count
                     System.out.println("Edge count: " + getEdgeCount(g));
                     break;
-// TODO: s6.4
-//                case 3:
-//                    //Get Person
-//                    System.out.println(getPerson(g));
-//                    break;
+                case 3:
+                    //Get Person
+                    System.out.println(getPerson(g));
+                    break;
 // TODO: s6.5
 //                case 4:
 //                    //Add Person
@@ -106,7 +104,7 @@ public class App {
         System.out.println("--------------");
         System.out.println("1) Get Count of the Vertices");
         System.out.println("2) Get Count of the Edges");
-//        System.out.println("3) Get person Vertex");
+        System.out.println("3) Get person Vertex");
 // TODO: s6.5
 //        System.out.println("4) Add person Vertex");
 //        System.out.println("5) Update person Vertex");
@@ -144,19 +142,18 @@ public class App {
         return g.E().count().next();
     }
 
-// TODO: s6.4
-//    public static String getPerson(GraphTraversalSource g) {
-//        Scanner keyboard = new Scanner(System.in);
-//        System.out.println("Enter the name for the person to find:");
-//        String name = keyboard.nextLine();
-//
-//        //This returns a List of the properties
-//        List properties = g.V().
-//                has("person", "name", name).
-//                valueMap().toList();
-//
-//        return properties.toString();
-//    }
+    public static String getPerson(GraphTraversalSource g) {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Enter the name for the person to find:");
+        String name = keyboard.nextLine();
+
+        //This returns a List of the properties
+        List properties = g.V().
+                has("person", "name", name).
+                valueMap().toList();
+
+        return properties.toString();
+    }
 
 // TODO: s6.5
 //    public static String addPerson(GraphTraversalSource g) {
