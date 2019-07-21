@@ -28,17 +28,13 @@ public class App {
         GraphTraversalSource g = getGraphTraversalSource(cluster);
         System.out.println("Using traversal source: " + g.toString());
 
-// TODO: s6.4
-//        displayMenu(g);
-        displayMenu();
+        displayMenu(g);
 
         cluster.close();
         System.exit(0);
     }
 
-// TODO: s6.4
-//    public static void displayMenu(raphTraversalSource g) {
-    public static void displayMenu() {
+    public static void displayMenu(GraphTraversalSource g) {
         int option = -1;
         while (option != 0)
         {
@@ -109,7 +105,6 @@ public class App {
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Main Menu:");
         System.out.println("--------------");
-// TODO: s6.4
 //        System.out.println("1) Get Count of the Vertices");
 //        System.out.println("2) Get Count of the Edges");
 //        System.out.println("3) Get person Vertex");
