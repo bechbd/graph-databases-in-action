@@ -7,7 +7,7 @@ import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 //import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
 //import org.apache.tinkerpop.gremlin.structure.Edge;
-//import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 import java.util.List;
 import java.util.Scanner;
@@ -56,11 +56,10 @@ public class App {
                     //Add Person
                     System.out.println("new person Vertex: " + addPerson(g));
                     break;
-// TODO: s6.5
-//                case 5:
-//                    //Update Person
-//                    System.out.println(updatePerson(g));
-//                    break;
+                case 5:
+                    //Update Person
+                    System.out.println("update person Vertex: " + updatePerson(g));
+                    break;
 // TODO: s6.5
 //                case 6:
 //                    //Delete Person
@@ -104,7 +103,7 @@ public class App {
         System.out.println("2) Get Count of the Edges");
         System.out.println("3) Get person Vertex");
         System.out.println("4) Add person Vertex");
-//        System.out.println("5) Update person Vertex");
+        System.out.println("5) Update person Vertex");
 //        System.out.println("6) Delete person Vertex");
 //        System.out.println("7) Add is_friends_with Edge");
 // TODO: s6.6
@@ -163,19 +162,18 @@ public class App {
         return newVertex.toString();
     }
 
-// TODO: s6.5
-//    public static String updatePerson(GraphTraversalSource g) {
-//        Scanner keyboard = new Scanner(System.in);
-//        System.out.println("Enter the name for the person to update:");
-//        String name = keyboard.nextLine();
-//        System.out.println("Enter the new name for the person:");
-//        String newName = keyboard.nextLine();
-//
-//        //This returns a Vertex type
-//        Vertex vertex = g.V().has("person", "name", name).property("name", newName).next();
-//
-//        return vertex.toString();
-//    }
+    public static String updatePerson(GraphTraversalSource g) {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Enter the name for the person to update:");
+        String name = keyboard.nextLine();
+        System.out.println("Enter the new name for the person:");
+        String newName = keyboard.nextLine();
+
+        //This returns a Vertex type
+        Vertex vertex = g.V().has("person", "name", name).property("name", newName).next();
+
+        return vertex.toString();
+    }
 
 // TODO: s6.5
 //    public static String deletePerson(GraphTraversalSource g) {
