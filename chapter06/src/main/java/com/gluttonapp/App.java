@@ -70,11 +70,10 @@ public class App {
                     //Find Friends
                     System.out.println(getFriends(g));
                     break;
-// TODO: s6.6
-//                case 9:
-//                    //Find Friends of Friends
-//                    System.out.println(getFriendsOfFriends(g));
-//                    break;
+                case 9:
+                    //Find Friends of Friends
+                    System.out.println(getFriendsOfFriends(g));
+                    break;
 // TODO: s6.6
 //                case 10:
 //                    //findPathBetweenUsers
@@ -102,7 +101,7 @@ public class App {
         System.out.println("6) Delete person Vertex");
         System.out.println("7) Add is_friends_with Edge");
         System.out.println("8) Find your Friends");
-//        System.out.println("9) Find the Friends of your Friends");
+        System.out.println("9) Find the Friends of your Friends");
 //        System.out.println("10) Find the path between two people");
         System.out.println("0) Quit");
         System.out.println("--------------");
@@ -212,20 +211,19 @@ public class App {
         return StringUtils.join(friends, "\r\n");
     }
 
-// TODO: s6.6
-//    public static String getFriendsOfFriends(GraphTraversalSource g) {
-//        Scanner keyboard = new Scanner(System.in);
-//        System.out.println("Enter the name for the person to find the friends of:");
-//        String name = keyboard.nextLine();
-//
-//        //Returns a List of Objects representing the friend of a friend person vertex properties
-//        List<Object> foff = g.V().has("person", "name", name).
-//                repeat(
-//                        out("is_friends_with")
-//                ).times(2).dedup().values().toList();
-//
-//        return StringUtils.join(foff, "\r\n");
-//    }
+    public static String getFriendsOfFriends(GraphTraversalSource g) {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Enter the name for the person to find the friends of:");
+        String name = keyboard.nextLine();
+
+        //Returns a List of Objects representing the friend of a friend person vertex properties
+        List<Object> foff = g.V().has("person", "name", name).
+                repeat(
+                        __.out("is_friends_with")
+                ).times(2).dedup().values().toList();
+
+        return StringUtils.join(foff, "\r\n");
+    }
 
 // TODO: s6.6
 //    public static String findPathBetweenUsers(GraphTraversalSource g) {
