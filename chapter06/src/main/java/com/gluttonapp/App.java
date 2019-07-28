@@ -14,7 +14,7 @@ import java.util.Scanner;
 import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
 //import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.both;
 //import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.has;
-//import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.out;
+import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.out;
 
 public class App {
 
@@ -216,10 +216,11 @@ public class App {
         System.out.println("Enter the name for the person to find the friends of:");
         String name = keyboard.nextLine();
 
-        //Returns a List of Objects representing the friend of a friend person vertex properties
+        // Returns a List of Objects representing the vertex properties
+        // of the friend of a friend person vertex
         List<Object> foff = g.V().has("person", "name", name).
                 repeat(
-                        __.out("is_friends_with")
+                        out("is_friends_with")
                 ).times(2).dedup().values().toList();
 
         return StringUtils.join(foff, "\r\n");
