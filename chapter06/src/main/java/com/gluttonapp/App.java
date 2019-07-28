@@ -3,6 +3,7 @@ package com.gluttonapp;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
+import org.apache.tinkerpop.gremlin.process.traversal.Path;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
 import org.apache.tinkerpop.gremlin.structure.Edge;
@@ -12,8 +13,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
-//import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.both;
-//import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.has;
+import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.both;
+import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.has;
 import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.out;
 
 public class App {
@@ -74,10 +75,10 @@ public class App {
                     //Find Friends of Friends
                     System.out.println(getFriendsOfFriends(g));
                     break;
-// TODO: s6.6
-//                case 10:
-//                    //findPathBetweenUsers
-//                    System.out.println(findPathBetweenUsers(g));
+                case 10:
+                    //findPathBetweenUsers
+                    System.out.println(findPathBetweenPeople(g));
+                    break;
                 default:
                     System.out.println("Sorry, please enter valid Option");
             }
@@ -102,7 +103,7 @@ public class App {
         System.out.println("7) Add is_friends_with Edge");
         System.out.println("8) Find your Friends");
         System.out.println("9) Find the Friends of your Friends");
-//        System.out.println("10) Find the path between two people");
+        System.out.println("10) Find the path between two people");
         System.out.println("0) Quit");
         System.out.println("--------------");
         System.out.println("Enter your choice:");
@@ -226,21 +227,21 @@ public class App {
         return StringUtils.join(foff, "\r\n");
     }
 
-// TODO: s6.6
-//    public static String findPathBetweenUsers(GraphTraversalSource g) {
-//        Scanner keyboard = new Scanner(System.in);
-//        System.out.println("Enter the name for the person to start the edge at:");
-//        String fromName = keyboard.nextLine();
-//        System.out.println("Enter the name for the person to end the edge at:");
-//        String toName = keyboard.nextLine();
-//
-//        //Returns a List of Path objects representing the path between the two person vertices
-//        List<Path> friends = g.V().has("person", "name", fromName).
-//                until(has("person", "name", toName)).
-//                repeat(
-//                        both("is_friends_with").simplePath()
-//                ).path().toList();
-//
-//        return StringUtils.join(friends, "\r\n");
-//    }
+    public static String findPathBetweenPeople(GraphTraversalSource g) {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Enter the name for the person to start the edge at:");
+        String fromName = keyboard.nextLine();
+        System.out.println("Enter the name for the person to end the edge at:");
+        String toName = keyboard.nextLine();
+
+        // Returns a List of Path objects which represent
+        // the path between the two person vertices
+        List<Path> friends = g.V().has("person", "name", fromName).
+                until(has("person", "name", toName)).
+                repeat(
+                        both("is_friends_with").simplePath()
+                ).path().toList();
+
+        return StringUtils.join(friends, "\r\n");
+    }
 }
