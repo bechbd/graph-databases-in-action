@@ -1,7 +1,6 @@
 package com.gluttonapp;
 
-// TODO: s6.6
-//import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
-// TODO: s6.6
 //import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.both;
 //import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.has;
 //import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.out;
@@ -68,11 +66,10 @@ public class App {
                     //Add Edge
                     System.out.println(addIsFriendsWithEdge(g));
                     break;
-// TODO: s6.6
-//                case 8:
-//                    //Find Friends
-//                    System.out.println(getFriends(g));
-//                    break;
+                case 8:
+                    //Find Friends
+                    System.out.println(getFriends(g));
+                    break;
 // TODO: s6.6
 //                case 9:
 //                    //Find Friends of Friends
@@ -104,8 +101,7 @@ public class App {
         System.out.println("5) Update person Vertex");
         System.out.println("6) Delete person Vertex");
         System.out.println("7) Add is_friends_with Edge");
-// TODO: s6.6
-//        System.out.println("8) Find your Friends");
+        System.out.println("8) Find your Friends");
 //        System.out.println("9) Find the Friends of your Friends");
 //        System.out.println("10) Find the path between two people");
         System.out.println("0) Quit");
@@ -202,19 +198,19 @@ public class App {
         return newEdge.toString();
     }
 
-// TODO: s6.6
-//    public static String getFriends(GraphTraversalSource g) {
-//        Scanner keyboard = new Scanner(System.in);
-//        System.out.println("Enter the name for the person to find the friends of:");
-//        String name = keyboard.nextLine();
-//
-//        //Returns a list of Objects representing the friend person vertex properties
-//        List<Object> friends = g.V().has("person", "name", name).
-//                both("is_friends_with").dedup().
-//                values().toList();
-//
-//        return StringUtils.join(friends, "\r\n");
-//    }
+    public static String getFriends(GraphTraversalSource g) {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Enter the name for the person to find the friends of:");
+        String name = keyboard.nextLine();
+
+        //Returns a list of Objects representing the friend person vertex properties
+        List<Object> friends = g.V().has("person", "name", name).
+                both("is_friends_with").dedup().
+                values().
+                toList();
+
+        return StringUtils.join(friends, "\r\n");
+    }
 
 // TODO: s6.6
 //    public static String getFriendsOfFriends(GraphTraversalSource g) {
