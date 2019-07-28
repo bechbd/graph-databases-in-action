@@ -60,11 +60,10 @@ public class App {
                     //Update Person
                     System.out.println("update person Vertex: " + updatePerson(g));
                     break;
-// TODO: s6.5
-//                case 6:
-//                    //Delete Person
-//                    System.out.println(deletePerson(g));
-//                    break;
+                case 6:
+                    //Delete Person
+                    System.out.println(deletePerson(g));
+                    break;
                 case 7:
                     //Add Edge
                     System.out.println(addIsFriendsWithEdge(g));
@@ -103,7 +102,7 @@ public class App {
         System.out.println("3) Get person Vertex");
         System.out.println("4) Add person Vertex");
         System.out.println("5) Update person Vertex");
-//        System.out.println("6) Delete person Vertex");
+        System.out.println("6) Delete person Vertex");
         System.out.println("7) Add is_friends_with Edge");
 // TODO: s6.6
 //        System.out.println("8) Find your Friends");
@@ -174,18 +173,19 @@ public class App {
         return vertex.toString();
     }
 
-// TODO: s6.5
-//    public static String deletePerson(GraphTraversalSource g) {
-//        Scanner keyboard = new Scanner(System.in);
-//        System.out.println("Enter the name for the person to delete:");
-//        String name = keyboard.nextLine();
-//
-//        //This returns a count of the vertices dropped
-//       Long vertexCount = g.V().has("person","name", name).sideEffect(__.drop().iterate()).count().next();
-//
-//
-//       return vertexCount.toString();
-//    }
+    public static String deletePerson(GraphTraversalSource g) {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Enter the name for the person to delete:");
+        String name = keyboard.nextLine();
+
+        //This returns a count of the vertices dropped
+       Long vertexCount = g.V().has("person", "name", name).
+               sideEffect(__.drop().iterate()).
+               count().
+               next();
+
+        return vertexCount.toString();
+    }
 
     public static String addIsFriendsWithEdge(GraphTraversalSource g) {
         Scanner keyboard = new Scanner(System.in);
