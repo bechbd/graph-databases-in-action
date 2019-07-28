@@ -5,8 +5,8 @@ package com.gluttonapp;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
-//import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
-//import org.apache.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
+import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 import java.util.List;
@@ -65,11 +65,10 @@ public class App {
 //                    //Delete Person
 //                    System.out.println(deletePerson(g));
 //                    break;
-// TODO: s6.5
-//                case 7:
-//                    //Add Edge
-//                    System.out.println(addIsFriendsWithEdge(g));
-//                    break;
+                case 7:
+                    //Add Edge
+                    System.out.println(addIsFriendsWithEdge(g));
+                    break;
 // TODO: s6.6
 //                case 8:
 //                    //Find Friends
@@ -105,7 +104,7 @@ public class App {
         System.out.println("4) Add person Vertex");
         System.out.println("5) Update person Vertex");
 //        System.out.println("6) Delete person Vertex");
-//        System.out.println("7) Add is_friends_with Edge");
+        System.out.println("7) Add is_friends_with Edge");
 // TODO: s6.6
 //        System.out.println("8) Find your Friends");
 //        System.out.println("9) Find the Friends of your Friends");
@@ -188,21 +187,20 @@ public class App {
 //       return vertexCount.toString();
 //    }
 
-// TODO: s6.5
-//    public static String addIsFriendsWithEdge(GraphTraversalSource g) {
-//        Scanner keyboard = new Scanner(System.in);
-//        System.out.println("Enter the name for the person to start the edge at:");
-//        String fromName = keyboard.nextLine();
-//        System.out.println("Enter the name for the person to end the edge at:");
-//        String toName = keyboard.nextLine();
-//
-//        //This returns an Edge type
-//        Edge newEdge = g.V().has("person", "name", fromName)
-//                .addE("is_friends_with").to(__.V().has("person", "name", toName))
-//                .next();
-//
-//        return newEdge.toString();
-//    }
+    public static String addIsFriendsWithEdge(GraphTraversalSource g) {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Enter the name for the person to start the edge at:");
+        String fromName = keyboard.nextLine();
+        System.out.println("Enter the name for the person to end the edge at:");
+        String toName = keyboard.nextLine();
+
+        //This returns an Edge type
+        Edge newEdge = g.V().has("person", "name", fromName)
+                .addE("is_friends_with").to(__.V().has("person", "name", toName))
+                .next();
+
+        return newEdge.toString();
+    }
 
 // TODO: s6.6
 //    public static String getFriends(GraphTraversalSource g) {
