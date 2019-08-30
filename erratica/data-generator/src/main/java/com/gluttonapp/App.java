@@ -15,10 +15,12 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
 import static org.apache.tinkerpop.gremlin.process.traversal.Order.shuffle;
 import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.*;
+import static org.apache.tinkerpop.gremlin.structure.VertexProperty.Cardinality.single;
 
 public class App {
     private static final String RESTAURANTS_CSV = "restaurants.csv";
@@ -36,32 +38,39 @@ public class App {
         // Add states
         System.out.println("adding states: Texas & Ohio");
         Vertex texas = addState(g, "Texas");
-        Vertex ohio = addState(g, "Ohio");
+        Vertex ohio  = addState(g, "Ohio");
 
         // Add cities
         System.out.println("adding cities: Houston & Cincinnati");
-        Vertex houton = addCity(g, texas, "Houston");
+        Vertex houston    = addCity(g, texas, "Houston");
         Vertex cincinnati = addCity(g, ohio, "Cincinnati");
 
         // Add users
         System.out.println("adding users: Dave, Josh, Hank, Ted");
-        Vertex dave = addUser(g,1,"Dave","Bech",houton);
-        Vertex josh = addUser(g,2,"Josh","Perry",houton);
-        Vertex hank = addUser(g,3,"Hank","Erin",cincinnati);
-        Vertex ted = addUser(g,4,"Ted","Wilson",cincinnati);
+        Vertex dave   = addUser(g, 1, "Dave","Bech", houston);
+        Vertex josh   = addUser(g, 2, "Josh","Perry", houston);
+        Vertex hank   = addUser(g, 3, "Hank","Erin", cincinnati);
+        Vertex ted    = addUser(g, 4, "Ted","Wilson", cincinnati);
+        Vertex kelly  = addUser(g, 5, "Kelly", "Gorman", houston);
+        Vertex jim    = addUser(g, 6, "Jim", "Miller", houston);
+        Vertex paras  = addUser(g, 7, "Paras", "Hilbert", cincinnati);
+        Vertex denise = addUser(g, 8, "Denise", "Mande", cincinnati);
 
         makeFriends(g, dave, josh);
         makeFriends(g, dave, hank);
         makeFriends(g, josh, hank);
         makeFriends(g, ted, josh);
+        makeFriends(g, dave, jim);
+        makeFriends(g, dave, kelly);
+        makeFriends(g, kelly, denise);
+        makeFriends(g, jim, denise);
+        makeFriends(g, jim, paras);
+        makeFriends(g, paras, denise);
 
         // Add restaurants and cuisines
         System.out.println("add restaurants from: " + RESTAURANTS_CSV);
-        try(
-            Reader reader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource(RESTAURANTS_CSV).toURI()));
-            CSVReader csvreader = new CSVReader(reader, ',', '\'', 1);
-            ) {
-
+        try(Reader reader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource(RESTAURANTS_CSV).toURI()));
+            CSVReader csvreader = new CSVReader(reader, ',', '\'', 1);) {
             String[] record;
             while((record = csvreader.readNext()) != null) {
                 addRestaurant(g, record[0], record[1], record[2]);
@@ -76,6 +85,10 @@ public class App {
         addReviews(g, josh);
         addReviews(g, hank);
         addReviews(g, ted);
+        addReviews(g, kelly);
+        addReviews(g, jim);
+        addReviews(g, paras);
+        addReviews(g, denise);
 
         System.out.println("graph label count summary: " + getGroupCounts(g));
 
@@ -94,16 +107,25 @@ public class App {
                 order().by(shuffle).
                 toList();
 
-        int reviewCount = (restaurants.size() / 2) + 2;  // create reviews for slightly more than half
+        int reviewCount = (restaurants.size() / 2) + 3;  // create reviews for slightly more than half
 
-        for (int i = 0; i <= reviewCount; i++) {
-            Vertex restaurant = restaurants.get(i);
+        List<Vertex> reviewRestaurants = restaurants.stream().limit(reviewCount).collect(Collectors.toList());
+
+        // make sure everyone reviews Dave's Big Deluxe (restaurant_id = 31), regardless of city
+        Vertex specialRestaurant = g.V().has("restaurant","restaurant_id", 31).next();
+        if (!reviewRestaurants.contains(specialRestaurant)) {
+            reviewRestaurants.add(specialRestaurant);
+        }
+
+        for (int i = 0; i < reviewRestaurants.size(); i++) {
+            Vertex restaurant = reviewRestaurants.get(i);
             int rating = random.nextInt(5) + 1;
 
             g.addV("review").
-              property("rating", rating).
-              property("body", faker.lorem().paragraph()).
-              property("created_date", faker.date().past(1500, TimeUnit.DAYS)).as("r").
+              property(single, "rating", rating).
+              property(single, "body", faker.lorem().paragraph()).
+              property(single, "created_date", faker.date().past(1500, TimeUnit.DAYS)).
+                    as("r").
             addE("about_a").to(V(restaurant)).
             V(user).addE("wrote_a").to("r").
             iterate();
@@ -121,9 +143,9 @@ public class App {
           coalesce(
               unfold(),
               addV("restaurant").
-                  property("restaurant_id", Integer.parseInt(restaurant_id)).
-                  property("restaurant_name", restaurant_name).
-                  property("address", faker.address().streetAddress())
+                  property(single, "restaurant_id", Integer.parseInt(restaurant_id)).
+                  property(single, "restaurant_name", restaurant_name).
+                  property(single, "address", faker.address().streetAddress())
             ).as("r").
                 addE("located_in").to(V().has("city","name",city)).
             select("r").
@@ -133,7 +155,7 @@ public class App {
           has("cuisine", "cuisine_name", cuisine_name).fold().
           coalesce(
               unfold(),
-              addV("cuisine").property("cuisine_name", cuisine_name)
+              addV("cuisine").property(single, "cuisine_name", cuisine_name)
             ).
           next();
 
@@ -149,9 +171,9 @@ public class App {
                 coalesce(
                     unfold(),
                     addV("user").
-                        property("user_id",    userId).
-                        property("first_name", firstName).
-                        property("last_name",  lastName)
+                        property(single, "user_id",    userId).
+                        property(single, "first_name", firstName).
+                        property(single, "last_name",  lastName)
                     ).as("v").
                 addE("lives_in").to(city).
                 select("v").
@@ -167,6 +189,7 @@ public class App {
     }
 
     public static String getGroupCounts(GraphTraversalSource g) {
+        // This approach should only be used on small or toy graphs
         return g.V().fold().
                 project("vertexCount","edgeCount").
                   by(unfold().groupCount().by(T.label)).
@@ -179,8 +202,7 @@ public class App {
         Vertex returnVertex =  g.V().has("state", "name", name).fold().
             coalesce(
                 unfold(),
-                addV("state").property("name", name)
-                    ).
+                addV("state").property(single, "name", name)).
             next();
         return returnVertex;
     };
@@ -189,8 +211,7 @@ public class App {
         Vertex returnVertex = g.V().has("city", "name", name).fold().
                 coalesce(
                     unfold(),
-                    addV("city").property("name", name)
-                ).
+                    addV("city").property(single, "name", name)).
                 next();
 
         g.V(returnVertex).addE("located_in").to(V(state)).iterate();

@@ -15,11 +15,27 @@ restaurant_id, restaurant_name, cuisine_name
 14,With Pasta,Italian
 15,With Salsa,Mexican
 16,With Curry,Indian
-17,With Rice & Noodles,Chinese
+17,With Noodles,Korean
 18,Without Heat,Sushi
 19,With Ginger,Thai
-20,With Beer,German
+20,With Brine,German
 21,With Wine,French
 22,With Shell,Tacos
 23,With Sauce,Pizza
 24,Without Chaser,bar
+25,With Rice,Japanese
+26,Fat Fried Fast,fast food
+27,U-S-A,American
+28,Taters,comfort food
+29,Awesome Suace,diner
+30,Food For Thought,coffee
+31,Dave\'s Big Deluxe,American
+32,Perryman\'s,bar
+33,Spicy Heat,Indian
+34,Rare Choice,steakhouse
+35,Pick & Go,fast food
+36,Satiated,diner
+37,Prancing Pony,roadhouse
+38,Mexican Hut,Mexican
+39,Hand Roll,Sushi
+40,Lonely Grape,bar
