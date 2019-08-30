@@ -21,10 +21,10 @@ paras = g.addV('person').property('name', 'Paras').next()
 denise = g.addV('person').property('name', 'Denise').next()
 
 g.addE('is_friends_with').from(dave).to(jim).
-        addE('is_friends_with').from(dave).to(kelly).
-        addE('is_friends_with').from(kelly).to(jim).
-        addE('is_friends_with').from(kelly).to(denise).
-        addE('is_friends_with').from(jim).to(denise).
-        addE('is_friends_with').from(jim).to(paras).
-        addE('is_friends_with').from(paras).to(denise).iterate()
+  addE('is_friends_with').from(dave).to(kelly).
+  addE('is_friends_with').from(kelly).to(jim).
+  addE('is_friends_with').from(kelly).to(denise).
+  addE('is_friends_with').from(jim).to(denise).
+  addE('is_friends_with').from(jim).to(paras).
+  addE('is_friends_with').from(paras).to(denise).iterate()
 
