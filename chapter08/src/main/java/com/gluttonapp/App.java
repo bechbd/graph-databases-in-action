@@ -1,30 +1,30 @@
 package com.gluttonapp;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
 import org.apache.tinkerpop.gremlin.process.traversal.Path;
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
-import org.apache.tinkerpop.gremlin.process.traversal.util.TraversalMetrics;
+import org.apache.tinkerpop.gremlin.process.traversal.step.util.WithOptions;
 import org.apache.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.process.traversal.*;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
-import static javax.swing.UIManager.put;
 import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
-import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.both;
-import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.has;
-import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.out;
+import static org.apache.tinkerpop.gremlin.process.traversal.Contains.within;
+import static org.apache.tinkerpop.gremlin.process.traversal.Scope.*;
+import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.*;
+import static org.apache.tinkerpop.gremlin.structure.Column.*;
 
 public class App {
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         Cluster cluster = connectToDatabase();
         System.out.println("Using cluster connection: " + cluster.toString());
         GraphTraversalSource g = getGraphTraversalSource(cluster);
@@ -37,8 +37,7 @@ public class App {
 
     public static void displayMenu(GraphTraversalSource g) {
         int option = -1;
-        while (option != 0)
-        {
+        while (option != 0) {
             option = showMenu();
             switch (option) {
                 case 0:
@@ -83,6 +82,18 @@ public class App {
                     //findPathBetweenUsers
                     System.out.println(findPathBetweenPeople(g));
                     break;
+                case 11:
+                    //newest Restaurant Reviews
+                    System.out.println(newestRestaurantReviews(g));
+                    break;
+                case 12:
+                    //newest Restaurant Reviews
+                    System.out.println(highestRatedRestaurants(g));
+                    break;
+                case 13:
+                    //newest Restaurant Reviews
+                    System.out.println(highestRatedByCuisine(g));
+                    break;
                 default:
                     System.out.println("Sorry, please enter valid Option");
             }
@@ -90,6 +101,7 @@ public class App {
 
         System.out.println("Exiting GluttonApp, Bye!");
     }
+
 
     public static int showMenu() {
 
@@ -108,6 +120,9 @@ public class App {
         System.out.println("8) Find your Friends");
         System.out.println("9) Find the Friends of your Friends");
         System.out.println("10) Find the path between two people");
+        System.out.println("11) Find the newest reviews for a restaurant");
+        System.out.println("12) What are the ten highest rated restaurants near me");
+        System.out.println("13) What restaurant near me, with a specific cuisine, is the highest rated");
         System.out.println("0) Quit");
         System.out.println("--------------");
         System.out.println("Enter your choice:");
@@ -123,27 +138,6 @@ public class App {
 
         return builder.create();
     }
-
-    public static void insecureGraphQuery(Cluster cluster, String userid) {
-        //Create a client connection
-        Client client = cluster.connect();
-        //Use String concatenation to create a our query
-        String query = "g.V().has(\"friend\", \"id\", " + userid + ")";
-        client.submit(query);
-    }
-
-    public static void secureGraphQuery(Cluster cluster, String userid) {
-        //Create a client connection
-        Client client = cluster.connect();
-        //Create a String of our query with a token userid
-        String query = "g.V().has(\"friend\", \"id\", userid)";
-        //Create a map containing our userid token and value
-        HashMap<String, Object> map = new HashMap<String, Object>(){{
-            put("userid", 1);
-        }};
-        client.submit(query, map);
-    }
-
 
     public static GraphTraversalSource getGraphTraversalSource(Cluster cluster) {
         return traversal().withRemote(DriverRemoteConnection.using(cluster));
@@ -199,10 +193,10 @@ public class App {
         String name = keyboard.nextLine();
 
         //This returns a count of the vertices dropped
-       Long vertexCount = g.V().has("person", "name", name).
-               sideEffect(__.drop().iterate()).
-               count().
-               next();
+        Long vertexCount = g.V().has("person", "name", name).
+                sideEffect(__.drop().iterate()).
+                count().
+                next();
 
         return vertexCount.toString();
     }
@@ -267,5 +261,80 @@ public class App {
                 ).path().toList();
 
         return StringUtils.join(friends, "\r\n");
+    }
+
+    private static String newestRestaurantReviews(GraphTraversalSource g) {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Enter the id for the restaurant:");
+        Integer restaurantId = Integer.valueOf(keyboard.nextLine());
+
+        // Returns a Map of Objects containing the restaurant id and the review
+        List<Map<Object, Object>> reviews = g.V().has("restaurant", "restaurant_id", restaurantId).
+                in("about_a").
+                order().
+                    by("created_date").
+                limit(3).
+                valueMap("rating", "created_date", "body").
+                    with(WithOptions.tokens).toList();
+
+
+        return StringUtils.join(reviews, "\r\n");
+    }
+
+    private static String highestRatedRestaurants(GraphTraversalSource g) {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Enter the id for the user:");
+        Integer userId = Integer.valueOf(keyboard.nextLine());
+
+        // Returns a Map of Objects containing the restaurant id and the review
+        List<Map<String, Object>> restaurants = g.V().has("user", "user_id", userId).
+                out("lives_in").
+                in("located_in").
+                group().
+                    by(identity()).
+                    by(__.in("about_a").values("rating").mean()).
+                order(local).
+                    by(values, Order.desc).
+                limit(local, 10).
+                unfold().
+                project("restaurant_id", "restaurant_name", "address", "rating_average").
+                    by(select(keys).values("restaurant_id")).
+                    by(select(keys).values("restaurant_name")).
+                    by(select(keys).values("address")).
+                    by(select(values)).toList();
+
+        return StringUtils.join(restaurants, "\r\n");
+    }
+
+    private static String highestRatedByCuisine(GraphTraversalSource g) {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Enter the id for the user:");
+        Integer userId = Integer.valueOf(keyboard.nextLine());
+        System.out.println("Enter a comma separated list of cuisines:");
+        List<String> cuisine_list = Arrays.asList(keyboard.nextLine().split(","));
+        cuisine_list.replaceAll(String::trim);
+
+
+        // Returns a Map of Objects containing the restaurant id and the review
+        List<Map<String, Object>> restaurants = g.V().has("user", "user_id", userId).
+                    out("lives_in").
+                    in("located_in").
+                    where(out("serves").has("cuisine_name", P.within(cuisine_list))).
+                    group().
+                        by(identity()).
+                        by(__.in("about_a").values("rating").mean()).
+                    order(local).
+                        by(values, Order.desc).
+                        unfold().
+                    limit(1).
+                    project("restaurant_id", "restaurant_name", "address", "rating_average", "cuisine").
+                        by(select(keys).values("restaurant_id")).
+                        by(select(keys).values("restaurant_name")).
+                        by(select(keys).values("address")).
+                        by(select(values)).
+                        by(select(keys).out("serves").values("cuisine_name")).toList();
+
+
+        return StringUtils.join(restaurants, "\r\n");
     }
 }
