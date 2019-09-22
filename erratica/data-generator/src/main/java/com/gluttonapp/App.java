@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -46,7 +47,7 @@ public class App {
         Vertex cincinnati = addCity(g, ohio, "Cincinnati");
 
         // Add users
-        System.out.println("adding users: Dave, Josh, Hank, Ted");
+        System.out.println("adding users: Dave, Josh, Hank, Ted, Kelly, Jim, Paras, Denise");
         Vertex dave   = addUser(g, 1, "Dave","Bech", houston);
         Vertex josh   = addUser(g, 2, "Josh","Perry", houston);
         Vertex hank   = addUser(g, 3, "Hank","Erin", cincinnati);
@@ -67,6 +68,16 @@ public class App {
         makeFriends(g, jim, paras);
         makeFriends(g, paras, denise);
 
+        List<Vertex> users = new ArrayList<>();
+        users.add(dave);
+        users.add(josh);
+        users.add(hank);
+        users.add(ted);
+        users.add(kelly);
+        users.add(jim);
+        users.add(paras);
+        users.add(denise);
+
         // Add restaurants and cuisines
         System.out.println("add restaurants from: " + RESTAURANTS_CSV);
         try(Reader reader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource(RESTAURANTS_CSV).toURI()));
@@ -81,19 +92,33 @@ public class App {
 
         // Add reviews
         System.out.println("adding reviews for each of the users");
-        addReviews(g, dave);
-        addReviews(g, josh);
-        addReviews(g, hank);
-        addReviews(g, ted);
-        addReviews(g, kelly);
-        addReviews(g, jim);
-        addReviews(g, paras);
-        addReviews(g, denise);
+        users.forEach( u -> addReviews(g, u));
+
+        // Add reviews of reviews
+        System.out.println("adding reviews of reviews for each of the users");
+        users.forEach( u -> addReviewOfReviews(g, u));
 
         System.out.println("graph label count summary: " + getGroupCounts(g));
 
         cluster.close();
         System.exit(0);
+    }
+
+    private static void addReviewOfReviews(GraphTraversalSource g, Vertex user) {
+        Random random = new Random();
+
+        // randomly grab ~80% of the user's friends's reviews
+        List<Vertex> reviews = g.V(user).both("is_friends_with").out("wrote_a").order().by(shuffle).coin(0.8).toList();
+
+        for (int i = 0; i < reviews.size(); i++) {
+            Vertex review = reviews.get(i);
+            int rating = random.nextInt(5) + 1;
+
+            g.addV("review_rating").property("rating", rating).as("rr").
+              addE("wrote_a").from(user).to("rr").
+              addE("about_a").from("rr").to(review).
+              iterate();
+        }
     }
 
     private static void addReviews(GraphTraversalSource g, Vertex user) {
@@ -191,7 +216,7 @@ public class App {
     public static String getGroupCounts(GraphTraversalSource g) {
         // This approach should only be used on small or toy graphs
         return g.V().fold().
-                project("vertexCount","edgeCount").
+                project("vertexCounts","edgeCounts").
                   by(unfold().groupCount().by(T.label)).
                   by(unfold().outE().groupCount().by(T.label)).
                 next().
