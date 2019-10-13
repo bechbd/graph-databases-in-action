@@ -1,7 +1,9 @@
 package com.gluttonapp;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
+import org.apache.tinkerpop.gremlin.driver.Result;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
 import org.apache.tinkerpop.gremlin.process.traversal.Path;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
@@ -11,7 +13,9 @@ import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.process.traversal.*;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -29,13 +33,14 @@ public class App {
         System.out.println("Using cluster connection: " + cluster.toString());
         GraphTraversalSource g = getGraphTraversalSource(cluster);
         System.out.println("Using traversal source: " + g.toString());
-        displayMenu(g);
+
+        displayMenu(g, cluster);
 
         cluster.close();
         System.exit(0);
     }
 
-    public static void displayMenu(GraphTraversalSource g) {
+    public static void displayMenu(GraphTraversalSource g, Cluster cluster) {
         int option = -1;
         while (option != 0) {
             option = showMenu();
@@ -94,6 +99,10 @@ public class App {
                     //newest Restaurant Reviews
                     System.out.println(highestRatedByCuisine(g));
                     break;
+                case 14:
+                    //friends top 3 resturants for local city
+                    findTop3FriendsRestaurantsForCity(cluster).forEach( r -> System.out.println(r.getObject().toString()));
+                    break;
                 default:
                     System.out.println("Sorry, please enter valid Option");
             }
@@ -123,6 +132,7 @@ public class App {
         System.out.println("11) Find the newest reviews for a restaurant");
         System.out.println("12) What are the ten highest rated restaurants near me");
         System.out.println("13) What restaurant near me, with a specific cuisine, is the highest rated");
+        System.out.println("14) What are my friends top three restaurants for a city");
         System.out.println("0) Quit");
         System.out.println("--------------");
         System.out.println("Enter your choice:");
@@ -314,7 +324,6 @@ public class App {
         List<String> cuisine_list = Arrays.asList(keyboard.nextLine().split(","));
         cuisine_list.replaceAll(String::trim);
 
-
         // Returns a Map of Objects containing the restaurant id and the review
         List<Map<String, Object>> restaurants = g.V().has("user", "user_id", userId).
                     out("lives_in").
@@ -334,7 +343,62 @@ public class App {
                         by(select(values)).
                         by(select(keys).out("serves").values("cuisine_name")).toList();
 
-
         return StringUtils.join(restaurants, "\r\n");
+    }
+
+    private static List<Result> findTop3FriendsRestaurantsForCity(Cluster cluster) {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Enter the first name for the person: ");
+        String name = keyboard.nextLine();
+        System.out.println("Enter the city to search in: ");
+        String city = keyboard.nextLine();
+
+        Client client = cluster.connect("sgSession");
+        Map<String,Object> params = new HashMap<>();
+        params.put("name",name);
+        params.put("city",city);
+
+        String defineSubgraph = "subgraph = g.V()." +
+                "has('user','first_name',name)." +
+                "bothE().subgraph('sg').otherV()." +
+                "outE('wrote').subgraph('sg').inV()." +
+                "optional(outE('about').subgraph('sg').inV())." +
+                "outE('about').subgraph('sg').inV()." +
+                "outE('located').subgraph('sg')." +
+                "cap('sg').next(); null";
+
+        client.submit(defineSubgraph, params);
+
+        String defineSgTraversal = "sg = subgraph.traversal(); null";
+
+        client.submit(defineSgTraversal);
+
+        String findTopLocalRestaurants = "sg.V()." +
+                "has('city','name',city)." +
+                "in('located')." +
+                "group()." +
+                  "by(identity())." +
+                  "by(__.in('about').values('rating').mean()).\n" +
+                "order(local)." +
+                  "by(values, desc)." +
+                "limit(local,3)." +
+                "unfold()." +
+                "project('restaurant_id','restaurant_name','address','rating_average')." +
+                  "by(select(keys).values('restaurant_id'))." +
+                  "by(select(keys).values('restaurant_name'))." +
+                  "by(select(keys).values('address'))." +
+                  "by(select(values))";
+
+        List<Result> results = new ArrayList<>();
+
+        try {
+            results = client.submit(findTopLocalRestaurants, params).all().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            client.close();
+        }
+
+        return results;
     }
 }

@@ -59,6 +59,7 @@ public class App {
 
         makeFriends(g, dave, josh);
         makeFriends(g, dave, hank);
+        makeFriends(g, dave, ted);
         makeFriends(g, josh, hank);
         makeFriends(g, ted, josh);
         makeFriends(g, dave, jim);
@@ -108,15 +109,15 @@ public class App {
         Random random = new Random();
 
         // randomly grab ~80% of the user's friends's reviews
-        List<Vertex> reviews = g.V(user).both("is_friends_with").out("wrote_a").order().by(shuffle).coin(0.8).toList();
+        List<Vertex> reviews = g.V(user).both("friends").out("wrote").order().by(shuffle).coin(0.8).toList();
 
         for (int i = 0; i < reviews.size(); i++) {
             Vertex review = reviews.get(i);
             int rating = random.nextInt(5) + 1;
 
             g.addV("review_rating").property("rating", rating).as("rr").
-              addE("wrote_a").from(user).to("rr").
-              addE("about_a").from("rr").to(review).
+              addE("wrote").from(user).to("rr").
+              addE("about").from("rr").to(review).
               iterate();
         }
     }
@@ -125,10 +126,10 @@ public class App {
         Faker faker = new Faker();
         Random random = new Random();
 
-        Vertex city = g.V(user).out("lives_in").next();
+        Vertex city = g.V(user).out("lives").next();
 
         List<Vertex> restaurants = g.V().hasLabel("restaurant").
-                where(out("located_in").is(city)).
+                where(out("located").is(city)).
                 order().by(shuffle).
                 toList();
 
@@ -151,8 +152,8 @@ public class App {
               property(single, "body", faker.lorem().paragraph()).
               property(single, "created_date", faker.date().past(1500, TimeUnit.DAYS)).
                     as("r").
-            addE("about_a").to(V(restaurant)).
-            V(user).addE("wrote_a").to("r").
+            addE("about").to(V(restaurant)).
+            V(user).addE("wrote").to("r").
             iterate();
         }
     }
@@ -172,7 +173,7 @@ public class App {
                   property(single, "restaurant_name", restaurant_name).
                   property(single, "address", faker.address().streetAddress())
             ).as("r").
-                addE("located_in").to(V().has("city","name",city)).
+                addE("located").to(V().has("city","name",city)).
             select("r").
             next();
 
@@ -200,13 +201,14 @@ public class App {
                         property(single, "first_name", firstName).
                         property(single, "last_name",  lastName)
                     ).as("v").
-                addE("lives_in").to(city).
+                addE("lives").to(city).
                 select("v").
                 next();
     }
 
     private static void makeFriends(GraphTraversalSource g, Vertex v1, Vertex v2) {
-        g.V(v1).addE("is_friends_with").to(v2).iterate();
+        Faker faker = new Faker();
+        g.V(v1).addE("friends").to(v2).property("created_date", faker.date().past(1500, TimeUnit.DAYS)).iterate();
     }
 
     public static void clearGraph(GraphTraversalSource g) {
@@ -239,7 +241,7 @@ public class App {
                     addV("city").property(single, "name", name)).
                 next();
 
-        g.V(returnVertex).addE("located_in").to(V(state)).iterate();
+        g.V(returnVertex).addE("located").to(V(state)).iterate();
 
         return returnVertex;
     }

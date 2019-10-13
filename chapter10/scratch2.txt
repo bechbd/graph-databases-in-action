@@ -1,0 +1,135 @@
+Step                                             Count  Ts Time(ms)  % Dur
+==========================================================================
+TinkerGraphStep(vertex,[~label.eq(user), user_i...   1   1   1.114   10.67
+VertexStep(OUT,[lives_in],vertex)                    1   1   0.113    1.08
+VertexStep(IN,[located_in],vertex)                  14  14   0.193    1.85
+NoOpBarrierStep(2500)                               14  14   2.964   28.38
+TraversalFilterStep([VertexStep(OUT,[serves],ve...   4   4   1.637   15.68
+GroupStep([IdentityStep, ProfileStep],[VertexSt...   1   1   2.222   21.28
+OrderLocalStep([[values, desc]])                     1   1   0.613    5.88
+UnfoldStep                                           2   2   0.066    0.64
+RangeGlobalStep(0,1)                                 1   1   0.129    1.24
+ProjectStep([restaurant_id, restaurant_name, ad...   1   1   0.886    8.49
+ReferenceElementStep                                 1   1   0.503    4.82
+>TOTAL                                               -   -  10.443       -
+
+// TEST 3 of v1 (warm) 9.411ms
+Step                                             Count  Ts Time(ms)  % Dur
+==========================================================================
+TinkerGraphStep(vertex,[~label.eq(user), user_i...   1   1   1.084   11.52
+VertexStep(OUT,[lives_in],vertex)                    1   1   0.110    1.17
+VertexStep(IN,[located_in],vertex)                   14 14   0.166    1.77
+NoOpBarrierStep(2500)                                14 14   0.346    3.68
+TraversalFilterStep([VertexStep(OUT,[serves],ve...    4  4   2.817   29.93
+GroupStep([IdentityStep, ProfileStep],[VertexSt...    1  1   1.959   20.83
+OrderLocalStep([[values, desc]])                      1  1   0.481    5.12
+UnfoldStep                                            2  2   0.051    0.55
+RangeGlobalStep(0,1)                                  1  1   0.099    1.06
+ProjectStep([restaurant_id, restaurant_name, ad...    1  1   1.112   11.82
+ReferenceElementStep                                  1  1   1.180   12.54
+>TOTAL                                                -  -   9.411       -
+
+// TEST 4 of v1 (warm) 12.425 ms
+Step                                             Count  Ts Time(ms)  % Dur
+===========================================================================
+TinkerGraphStep(vertex,[~label.eq(user), user_i...    1  1    3.703  29.81
+VertexStep(OUT,[lives_in],vertex)                     1  1    0.327   2.63
+VertexStep(IN,[located_in],vertex)                   14 14    0.230   1.86
+NoOpBarrierStep(2500)                                14 14    0.796   6.41
+TraversalFilterStep([VertexStep(OUT,[serves],ve...    4  4    2.077  16.72
+GroupStep([IdentityStep, ProfileStep],[VertexSt...    1  1    2.989  24.06
+OrderLocalStep([[values, desc]])                      1  1    0.628   5.05
+UnfoldStep                                            2  2    0.118   0.96
+RangeGlobalStep(0,1)                                  1  1    0.129   1.04
+ProjectStep([restaurant_id, restaurant_name, ad...    1  1    0.703   5.66
+ReferenceElementStep                                  1  1    0.721   5.80
+>TOTAL                                                -  -   12.425      -
+
+
+==>Traversal Metrics
+Step                                              Count  Ts Time(ms) % Dur
+==========================================================================
+TinkerGraphStep(vertex,[~label.eq(user), user_i...    1  1    0.103   3.43
+VertexStep(OUT,[lives_in],vertex)                     1  1    0.058   1.96
+VertexStep(IN,[located_in],vertex)                   14 14    0.065   2.17
+NoOpBarrierStep(2500)                                14 14    0.130   4.34
+TraversalFilterStep([VertexStep(OUT,[serves],ve...    4  4    0.589  19.62
+GroupStep([IdentityStep, ProfileStep],[VertexSt...    1  1    0.934  31.10
+OrderLocalStep([[values, desc]])                      1  1    0.290   9.68
+UnfoldStep                                            2  2    0.022   0.76
+RangeGlobalStep(0,1)                                  1  1    0.065   2.17
+ProjectStep([restaurant_id, restaurant_name, ad...    1  1    0.356  11.86
+>TOTAL                                                -  -    3.004      -
+
+
+Step                                              Count  Ts Time(ms) % Dur
+=============================================================================================================
+TinkerGraphStep(vertex,[~label.eq(user), user_i...    1   1   0.101   3.01
+VertexStep(OUT,[lives_in],vertex)                     1   1   0.049   1.47
+VertexStep(IN,[located_in],vertex)                   14  14   0.064   1.92
+NoOpBarrierStep(2500)                                14  14   0.168   4.99
+TraversalFilterStep([VertexStep(OUT,[serves],ve...    4   4   0.637  18.93
+GroupStep([IdentityStep, ProfileStep],[VertexSt...    1   1   1.133  33.65
+OrderLocalStep([[values, desc]])                      1   1   0.291   8.67
+UnfoldStep                                            2   2   0.045   1.36
+RangeGlobalStep(0,1)                                  1   1   0.077   2.31
+ProjectStep([restaurant_id, restaurant_name, ad...    1   1   0.573  17.02
+>TOTAL                                                -   -   3.367      -
+
+Step                                              Count  Ts Time(ms) % Dur
+=============================================================================================================
+TinkerGraphStep(vertex,[~label.eq(user), user_i...    1   1   0.112   2.99
+VertexStep(OUT,[lives_in],vertex)                     1   1   0.056   1.51
+VertexStep(IN,[located_in],vertex)                   14  14   0.067   1.81
+NoOpBarrierStep(2500)                                14  14   0.123   3.31
+TraversalFilterStep([VertexStep(OUT,[serves],ve...    4   4   0.623  16.65
+GroupStep([IdentityStep, ProfileStep],[VertexSt...    1   1   1.552  41.46
+OrderLocalStep([[values, desc]])                      1   1   0.288   7.71
+UnfoldStep                                            2   2   0.023   0.64
+RangeGlobalStep(0,1)                                  1   1   0.076   2.05
+ProjectStep([restaurant_id, restaurant_name, ad...    1   1   0.460  12.29
+>TOTAL                                                -   -   3.743      -
+
+
+
+Step                                              Count  Ts Time(ms) % Dur
+==========================================================================
+TinkerGraphStep(vertex,[~label.eq(user), user_i...    1   1   0.097   3.89
+VertexStep(OUT,[lives_in],vertex)                     1   1   0.039   1.57
+VertexStep(IN,[located_in],vertex)                   14  14   0.040   1.60
+NoOpBarrierStep(2500)                                14  14   0.076   3.04
+HasStep([cuisine_name.within([fast food, Mexica...    4   4   0.055   2.21
+GroupStep([IdentityStep, ProfileStep],[VertexSt...    1   1   0.557  22.24
+OrderLocalStep([[values, desc]])                      1   1   0.301  12.03
+UnfoldStep                                            2   2   0.024   0.97
+RangeGlobalStep(0,1)                                  1   1   0.069   2.78
+ProjectStep([restaurant_id, restaurant_name, ad...    1   1   1.079  43.04
+>TOTAL                                                -   -   2.509      -
+
+Step                                              Count  Ts Time(ms) % Dur
+==========================================================================
+TinkerGraphStep(vertex,[~label.eq(user), user_i...    1   1   0.072   4.63
+VertexStep(OUT,[lives_in],vertex)                     1   1   0.061   3.93
+VertexStep(IN,[located_in],vertex)                   14  14   0.059   3.79
+NoOpBarrierStep(2500)                                14  14   0.225  14.27
+HasStep([cuisine_name.within([fast food, Mexica...    4   4   0.041   2.62
+GroupStep([IdentityStep, ProfileStep],[VertexSt...    1   1   0.395  25.04
+OrderLocalStep([[values, desc]])                      1   1   0.168  10.66
+UnfoldStep                                            2   2   0.025   1.63
+RangeGlobalStep(0,1)                                  1   1   0.052   3.31
+ProjectStep([restaurant_id, restaurant_name, ad...    1   1   0.274  17.37
+>TOTAL                                                -   -   1.577      -
+
+Step                                              Count  Ts Time(ms) % Dur
+==========================================================================
+TinkerGraphStep(vertex,[~label.eq(user), user_i...    1   1   0.153   8.52
+VertexStep(OUT,[lives_in],vertex)                     1   1   0.241  13.38
+VertexStep(IN,[located_in],vertex)                   14  14   0.058   3.24
+NoOpBarrierStep(2500)                                14  14   0.055   3.08
+HasStep([cuisine_name.within([fast food, Mexica...    4   4   0.055   3.07
+GroupStep([IdentityStep, ProfileStep],[VertexSt...    1   1   0.455  25.23
+OrderLocalStep([[values, desc]])                      1   1   0.134   7.47
+UnfoldStep                                            2   2   0.020   1.14
+RangeGlobalStep(0,1)                                  1   1   0.056   3.15
+ProjectStep([restaurant_id, restaurant_name, ad...    1   1   0.345  19.15
+>TOTAL                                                -   -   1.804      -
