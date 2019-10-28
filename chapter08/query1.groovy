@@ -35,10 +35,10 @@ g.V().has('user','user_id',uid).
 // limit to just one response
   limit(1).
 // create return object = restaurant properties, rating average, cuisine
-  project("restaurant_id","restaurant_name","address","rating_average","cuisine").
-    by(select(keys).values("restaurant_id")).
-    by(select(keys).values("restaurant_name")).
-    by(select(keys).values("address")).
+  project('restaurant_id','restaurant_name','address','rating_average','cuisine').
+    by(select(keys).values('restaurant_id')).
+    by(select(keys).values('restaurant_name')).
+    by(select(keys).values('address')).
     by(select(values)).
     by(select(keys).out('serves').values('cuisine_name'))
 // return: {restaurant_id=?, restaurant_name=?, address=?, rating_average=?, cuisine=?}
@@ -55,10 +55,10 @@ g.V().has('user','user_id',uid).                                  // user
     by(values, desc).                                             //   by rating_average desc
   unfold().                                                       // unfold collection
   limit(1).                                                       // take only the top
-  project("restaurant_id","restaurant_name","address","rating_average","cuisine").  // create map
-    by(select(keys).values("restaurant_id")).                     // restaurant_id
-    by(select(keys).values("restaurant_name")).                   // restaurant_name
-    by(select(keys).values("address")).                           // address
+  project('restaurant_id','restaurant_name','address','rating_average','cuisine').  // create map
+    by(select(keys).values('restaurant_id')).                     // restaurant_id
+    by(select(keys).values('restaurant_name')).                   // restaurant_name
+    by(select(keys).values('address')).                           // address
     by(select(values)).                                           // rating_average
     by(select(keys).out('serves').values('cuisine_name'))         // cuisine
 
@@ -74,10 +74,10 @@ g.V().has('user','user_id',uid).
     by(values, desc).
   unfold().
   limit(1).
-  project("restaurant_id","restaurant_name","address","rating_average","cuisine").
-    by(select(keys).values("restaurant_id")).
-    by(select(keys).values("restaurant_name")).
-    by(select(keys).values("address")).
+  project('restaurant_id','restaurant_name','address','rating_average','cuisine').
+    by(select(keys).values('restaurant_id')).
+    by(select(keys).values('restaurant_name')).
+    by(select(keys).values('address')).
     by(select(values)).
     by(select(keys).out('serves').values('cuisine_name'))
 

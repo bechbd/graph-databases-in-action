@@ -37,8 +37,7 @@ public class App {
 
     public static void displayMenu(GraphTraversalSource g) {
         int option = -1;
-        while (option != 0)
-        {
+        while (option != 0) {
             option = showMenu();
             switch (option) {
                 case 0:
@@ -83,6 +82,9 @@ public class App {
                     //findPathBetweenUsers
                     System.out.println(findPathBetweenPeople(g));
                     break;
+                case 11:
+                    // What restaurant near me, with a specific cuisine, is the highest rated?
+                    System.out.println(findHighestRatedLocalRestaurantByCuisine(g))
                 default:
                     System.out.println("Sorry, please enter valid Option");
             }
@@ -108,6 +110,7 @@ public class App {
         System.out.println("8) Find your Friends");
         System.out.println("9) Find the Friends of your Friends");
         System.out.println("10) Find the path between two people");
+        System.out.println("11) What restaurant near me, with a specific cuisine, is the highest rated?");
         System.out.println("0) Quit");
         System.out.println("--------------");
         System.out.println("Enter your choice:");
@@ -267,5 +270,11 @@ public class App {
                 ).path().toList();
 
         return StringUtils.join(friends, "\r\n");
+    }
+
+    public static String findHighestRatedLocalRestaurantByCuisine(GraphTraversalSource g) {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Enter the name for the person to start the edge at:");
+
     }
 }

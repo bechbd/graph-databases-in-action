@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -45,19 +46,20 @@ public class App {
         Vertex houston    = addCity(g, texas, "Houston");
         Vertex cincinnati = addCity(g, ohio, "Cincinnati");
 
-        // Add users
-        System.out.println("adding users: Dave, Josh, Hank, Ted");
-        Vertex dave   = addUser(g, 1, "Dave","Bech", houston);
-        Vertex josh   = addUser(g, 2, "Josh","Perry", houston);
-        Vertex hank   = addUser(g, 3, "Hank","Erin", cincinnati);
-        Vertex ted    = addUser(g, 4, "Ted","Wilson", cincinnati);
-        Vertex kelly  = addUser(g, 5, "Kelly", "Gorman", houston);
-        Vertex jim    = addUser(g, 6, "Jim", "Miller", houston);
-        Vertex paras  = addUser(g, 7, "Paras", "Hilbert", cincinnati);
-        Vertex denise = addUser(g, 8, "Denise", "Mande", cincinnati);
+        // Add people
+        System.out.println("adding people: Dave, Josh, Hank, Ted, Kelly, Jim, Paras, Denise");
+        Vertex dave   = addPerson(g, 1, "Dave","Bech", houston);
+        Vertex josh   = addPerson(g, 2, "Josh","Perry", houston);
+        Vertex hank   = addPerson(g, 3, "Hank","Erin", cincinnati);
+        Vertex ted    = addPerson(g, 4, "Ted","Wilson", cincinnati);
+        Vertex kelly  = addPerson(g, 5, "Kelly", "Gorman", houston);
+        Vertex jim    = addPerson(g, 6, "Jim", "Miller", houston);
+        Vertex paras  = addPerson(g, 7, "Paras", "Hilbert", cincinnati);
+        Vertex denise = addPerson(g, 8, "Denise", "Mande", cincinnati);
 
         makeFriends(g, dave, josh);
         makeFriends(g, dave, hank);
+        makeFriends(g, dave, ted);
         makeFriends(g, josh, hank);
         makeFriends(g, ted, josh);
         makeFriends(g, dave, jim);
@@ -66,6 +68,16 @@ public class App {
         makeFriends(g, jim, denise);
         makeFriends(g, jim, paras);
         makeFriends(g, paras, denise);
+
+        List<Vertex> persons = new ArrayList<>();
+        persons.add(dave);
+        persons.add(josh);
+        persons.add(hank);
+        persons.add(ted);
+        persons.add(kelly);
+        persons.add(jim);
+        persons.add(paras);
+        persons.add(denise);
 
         // Add restaurants and cuisines
         System.out.println("add restaurants from: " + RESTAURANTS_CSV);
@@ -80,15 +92,12 @@ public class App {
         }
 
         // Add reviews
-        System.out.println("adding reviews for each of the users");
-        addReviews(g, dave);
-        addReviews(g, josh);
-        addReviews(g, hank);
-        addReviews(g, ted);
-        addReviews(g, kelly);
-        addReviews(g, jim);
-        addReviews(g, paras);
-        addReviews(g, denise);
+        System.out.println("adding reviews for each of the persons");
+        persons.forEach( u -> addReviews(g, u));
+
+        // Add reviews of reviews
+        System.out.println("adding reviews of reviews for each of the persons");
+        persons.forEach( u -> addReviewOfReviews(g, u));
 
         System.out.println("graph label count summary: " + getGroupCounts(g));
 
@@ -96,14 +105,31 @@ public class App {
         System.exit(0);
     }
 
-    private static void addReviews(GraphTraversalSource g, Vertex user) {
+    private static void addReviewOfReviews(GraphTraversalSource g, Vertex person) {
+        Random random = new Random();
+
+        // randomly grab ~80% of the person's friends's reviews
+        List<Vertex> reviews = g.V(person).both("friends").out("wrote").order().by(shuffle).coin(0.8).toList();
+
+        for (int i = 0; i < reviews.size(); i++) {
+            Vertex review = reviews.get(i);
+            int rating = random.nextInt(5) + 1;
+
+            g.addV("review_rating").property("rating", rating).as("rr").
+              addE("wrote").from(person).to("rr").
+              addE("about").from("rr").to(review).
+              iterate();
+        }
+    }
+
+    private static void addReviews(GraphTraversalSource g, Vertex person) {
         Faker faker = new Faker();
         Random random = new Random();
 
-        Vertex city = g.V(user).out("lives_in").next();
+        Vertex city = g.V(person).out("lives").next();
 
         List<Vertex> restaurants = g.V().hasLabel("restaurant").
-                where(out("located_in").is(city)).
+                where(out("located").is(city)).
                 order().by(shuffle).
                 toList();
 
@@ -126,8 +152,8 @@ public class App {
               property(single, "body", faker.lorem().paragraph()).
               property(single, "created_date", faker.date().past(1500, TimeUnit.DAYS)).
                     as("r").
-            addE("about_a").to(V(restaurant)).
-            V(user).addE("wrote_a").to("r").
+            addE("about").to(V(restaurant)).
+            V(person).addE("wrote").to("r").
             iterate();
         }
     }
@@ -147,7 +173,7 @@ public class App {
                   property(single, "restaurant_name", restaurant_name).
                   property(single, "address", faker.address().streetAddress())
             ).as("r").
-                addE("located_in").to(V().has("city","name",city)).
+                addE("located").to(V().has("city","name",city)).
             select("r").
             next();
 
@@ -166,22 +192,24 @@ public class App {
             ).iterate();
     }
 
-    private static Vertex addUser(GraphTraversalSource g, int userId, String firstName, String lastName, Vertex city) {
-        return (Vertex) g.V().has("user_id", userId).fold().
+    private static Vertex addPerson(GraphTraversalSource g, int personId, String firstName, String lastName, Vertex city) {
+        return (Vertex) g.V().has("person_id", personId).fold().
                 coalesce(
                     unfold(),
-                    addV("user").
-                        property(single, "user_id",    userId).
+                    addV("person").
+                        property(single, "person_id",    personId).
                         property(single, "first_name", firstName).
                         property(single, "last_name",  lastName)
                     ).as("v").
-                addE("lives_in").to(city).
+                addE("lives").to(city).
                 select("v").
                 next();
     }
 
     private static void makeFriends(GraphTraversalSource g, Vertex v1, Vertex v2) {
-        g.V(v1).addE("is_friends_with").to(v2).iterate();
+//        Faker faker = new Faker();
+//        g.V(v1).addE("friends").to(v2).property("created_date", faker.date().past(1500, TimeUnit.DAYS)).iterate();
+        g.V(v1).addE("friends").to(v2).iterate();
     }
 
     public static void clearGraph(GraphTraversalSource g) {
@@ -191,7 +219,7 @@ public class App {
     public static String getGroupCounts(GraphTraversalSource g) {
         // This approach should only be used on small or toy graphs
         return g.V().fold().
-                project("vertexCount","edgeCount").
+                project("vertexCounts","edgeCounts").
                   by(unfold().groupCount().by(T.label)).
                   by(unfold().outE().groupCount().by(T.label)).
                 next().
@@ -214,7 +242,7 @@ public class App {
                     addV("city").property(single, "name", name)).
                 next();
 
-        g.V(returnVertex).addE("located_in").to(V(state)).iterate();
+        g.V(returnVertex).addE("located").to(V(state)).iterate();
 
         return returnVertex;
     }

@@ -100,10 +100,10 @@ g.V().has('user','user_id',uid).
   limit(local,10).
 // Return restaurants + rating_average
   unfold().
-  project("restaurant_id","restaurant_name","address","rating_average").
-    by(select(keys).values("restaurant_id")).
-    by(select(keys).values("restaurant_name")).
-    by(select(keys).values("address")).
+  project('restaurant_id','restaurant_name','address','rating_average').
+    by(select(keys).values('restaurant_id')).
+    by(select(keys).values('restaurant_name')).
+    by(select(keys).values('address')).
     by(select(values))
 
 
@@ -166,9 +166,9 @@ g.V().has('user','user_id',uid).
     by(values, desc)
   limit(local,10).
   unfold().
-  project("restaurant_id","restaurant_name","address","rating_average").
-    by(select(keys).values("restaurant_id")).
-    by(select(keys).values("restaurant_name")).
-    by(select(keys).values("address")).
+  project('restaurant_id','restaurant_name','address','rating_average').
+    by(select(keys).values('restaurant_id')).
+    by(select(keys).values('restaurant_name')).
+    by(select(keys).values('address')).
     by(select(values))
 
