@@ -1,22 +1,15 @@
 package com.gluttonapp;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
 import org.apache.tinkerpop.gremlin.process.traversal.Path;
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
-import org.apache.tinkerpop.gremlin.process.traversal.util.TraversalMetrics;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
-
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
-
-import static javax.swing.UIManager.put;
 import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
 import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.both;
 import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.has;
@@ -68,7 +61,7 @@ public class App {
                     break;
                 case 7:
                     //Add Edge
-                    System.out.println(addIsFriendsWithEdge(g));
+                    System.out.println(addFriendsEdge(g));
                     break;
                 case 8:
                     //Find Friends
@@ -82,9 +75,6 @@ public class App {
                     //findPathBetweenUsers
                     System.out.println(findPathBetweenPeople(g));
                     break;
-                case 11:
-                    // What restaurant near me, with a specific cuisine, is the highest rated?
-                    System.out.println(findHighestRatedLocalRestaurantByCuisine(g))
                 default:
                     System.out.println("Sorry, please enter valid Option");
             }
@@ -106,11 +96,10 @@ public class App {
         System.out.println("4) Add person Vertex");
         System.out.println("5) Update person Vertex");
         System.out.println("6) Delete person Vertex");
-        System.out.println("7) Add is_friends_with Edge");
+        System.out.println("7) Add friends Edge");
         System.out.println("8) Find your Friends");
         System.out.println("9) Find the Friends of your Friends");
         System.out.println("10) Find the path between two people");
-        System.out.println("11) What restaurant near me, with a specific cuisine, is the highest rated?");
         System.out.println("0) Quit");
         System.out.println("--------------");
         System.out.println("Enter your choice:");
@@ -127,27 +116,6 @@ public class App {
         return builder.create();
     }
 
-    public static void insecureGraphQuery(Cluster cluster, String userid) {
-        //Create a client connection
-        Client client = cluster.connect();
-        //Use String concatenation to create a our query
-        String query = "g.V().has(\"friend\", \"id\", " + userid + ")";
-        client.submit(query);
-    }
-
-    public static void secureGraphQuery(Cluster cluster, String userid) {
-        //Create a client connection
-        Client client = cluster.connect();
-        //Create a String of our query with a token userid
-        String query = "g.V().has(\"friend\", \"id\", userid)";
-        //Create a map containing our userid token and value
-        HashMap<String, Object> map = new HashMap<String, Object>(){{
-            put("userid", 1);
-        }};
-        client.submit(query, map);
-    }
-
-
     public static GraphTraversalSource getGraphTraversalSource(Cluster cluster) {
         return traversal().withRemote(DriverRemoteConnection.using(cluster));
     }
@@ -162,12 +130,12 @@ public class App {
 
     public static String getPerson(GraphTraversalSource g) {
         Scanner keyboard = new Scanner(System.in);
-        System.out.println("Enter the name for the person to find:");
+        System.out.println("Enter the first name for the person to find:");
         String name = keyboard.nextLine();
 
         //This returns a List of the properties
         List properties = g.V().
-                has("person", "name", name).
+                has("person", "first_name", name).
                 valueMap().toList();
 
         return properties.toString();
@@ -179,7 +147,7 @@ public class App {
         String name = keyboard.nextLine();
 
         //This returns a Vertex type
-        Vertex newVertex = g.addV("person").property("name", name).next();
+        Vertex newVertex = g.addV("person").property("first_name", name).next();
 
         return newVertex.toString();
     }
@@ -192,7 +160,7 @@ public class App {
         String newName = keyboard.nextLine();
 
         //This returns a Vertex type
-        Vertex vertex = g.V().has("person", "name", name).property("name", newName).next();
+        Vertex vertex = g.V().has("person", "first_name", name).property("first_name", newName).next();
         return vertex.toString();
     }
 
@@ -202,7 +170,7 @@ public class App {
         String name = keyboard.nextLine();
 
         //This returns a count of the vertices dropped
-       Long vertexCount = g.V().has("person", "name", name).
+       Long vertexCount = g.V().has("person", "first_name", name).
                sideEffect(__.drop().iterate()).
                count().
                next();
@@ -210,7 +178,7 @@ public class App {
         return vertexCount.toString();
     }
 
-    public static String addIsFriendsWithEdge(GraphTraversalSource g) {
+    public static String addFriendsEdge(GraphTraversalSource g) {
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Enter the name for the person to start the edge at:");
         String fromName = keyboard.nextLine();
@@ -218,8 +186,8 @@ public class App {
         String toName = keyboard.nextLine();
 
         //This returns an Edge type
-        Edge newEdge = g.V().has("person", "name", fromName)
-                .addE("is_friends_with").to(__.V().has("person", "name", toName))
+        Edge newEdge = g.V().has("person", "first_name", fromName)
+                .addE("friends").to(__.V().has("person", "first_name", toName))
                 .next();
 
         return newEdge.toString();
@@ -231,8 +199,8 @@ public class App {
         String name = keyboard.nextLine();
 
         //Returns a list of Objects representing the friend person vertex properties
-        List<Object> friends = g.V().has("person", "name", name).
-                both("is_friends_with").dedup().
+        List<Object> friends = g.V().has("person", "first_name", name).
+                both("friends").dedup().
                 values().
                 toList();
 
@@ -246,9 +214,9 @@ public class App {
 
         // Returns a List of Objects representing the vertex properties
         // of the friend of a friend person vertex
-        List<Object> foff = g.V().has("person", "name", name).
+        List<Object> foff = g.V().has("person", "first_name", name).
                 repeat(
-                        out("is_friends_with")
+                        out("friends")
                 ).times(2).dedup().values().toList();
 
         return StringUtils.join(foff, "\r\n");
@@ -263,18 +231,12 @@ public class App {
 
         // Returns a List of Path objects which represent
         // the path between the two person vertices
-        List<Path> friends = g.V().has("person", "name", fromName).
-                until(has("person", "name", toName)).
+        List<Path> friends = g.V().has("person", "first_name", fromName).
+                until(has("person", "first_name", toName)).
                 repeat(
-                        both("is_friends_with").simplePath()
+                        both("friends").simplePath()
                 ).path().toList();
 
         return StringUtils.join(friends, "\r\n");
-    }
-
-    public static String findHighestRatedLocalRestaurantByCuisine(GraphTraversalSource g) {
-        Scanner keyboard = new Scanner(System.in);
-        System.out.println("Enter the name for the person to start the edge at:");
-
     }
 }
