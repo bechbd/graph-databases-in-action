@@ -36,42 +36,34 @@ public class App {
                 case 0:
                     break;
                 case 1:
-                    //Get Vertex Count
-                    System.out.println("Vertex count: " + getVertexCount(g));
+                    //Get Person
+                    System.out.println("Person Vertex: " + getPerson(g));
                     break;
                 case 2:
-                    //Get Edge Count
-                    System.out.println("Edge count: " + getEdgeCount(g));
+                    //Add Person
+                    System.out.println("New person Vertex: " + addPerson(g));
                     break;
                 case 3:
-                    //Get Person
-                    System.out.println("person Vertex: " + getPerson(g));
+                    //Update Person
+                    System.out.println("Update person Vertex: " + updatePerson(g));
                     break;
                 case 4:
-                    //Add Person
-                    System.out.println("new person Vertex: " + addPerson(g));
-                    break;
-                case 5:
-                    //Update Person
-                    System.out.println("update person Vertex: " + updatePerson(g));
-                    break;
-                case 6:
                     //Delete Person
                     System.out.println(deletePerson(g));
                     break;
-                case 7:
+                case 5:
                     //Add Edge
                     System.out.println(addFriendsEdge(g));
                     break;
-                case 8:
+                case 6:
                     //Find Friends
                     System.out.println(getFriends(g));
                     break;
-                case 9:
+                case 7:
                     //Find Friends of Friends
                     System.out.println(getFriendsOfFriends(g));
                     break;
-                case 10:
+                case 8:
                     //findPathBetweenUsers
                     System.out.println(findPathBetweenPeople(g));
                     break;
@@ -90,16 +82,14 @@ public class App {
         System.out.println();
         System.out.println("Main Menu:");
         System.out.println("--------------");
-        System.out.println("1) Get Count of the Vertices");
-        System.out.println("2) Get Count of the Edges");
-        System.out.println("3) Get person Vertex");
-        System.out.println("4) Add person Vertex");
-        System.out.println("5) Update person Vertex");
-        System.out.println("6) Delete person Vertex");
-        System.out.println("7) Add friends Edge");
-        System.out.println("8) Find your Friends");
-        System.out.println("9) Find the Friends of your Friends");
-        System.out.println("10) Find the path between two people");
+        System.out.println("1) Get person Vertex");
+        System.out.println("2) Add person Vertex");
+        System.out.println("3) Update person Vertex");
+        System.out.println("4) Delete person Vertex");
+        System.out.println("5) Add friends Edge");
+        System.out.println("6) Find your Friends");
+        System.out.println("7) Find the Friends of your Friends");
+        System.out.println("8) Find the path between two people");
         System.out.println("0) Quit");
         System.out.println("--------------");
         System.out.println("Enter your choice:");
@@ -118,14 +108,6 @@ public class App {
 
     public static GraphTraversalSource getGraphTraversalSource(Cluster cluster) {
         return traversal().withRemote(DriverRemoteConnection.using(cluster));
-    }
-
-    public static Long getVertexCount(GraphTraversalSource g) {
-        return g.V().count().next();
-    }
-
-    public static Long getEdgeCount(GraphTraversalSource g) {
-        return g.E().count().next();
     }
 
     public static String getPerson(GraphTraversalSource g) {
