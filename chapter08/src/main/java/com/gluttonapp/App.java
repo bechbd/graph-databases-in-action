@@ -48,58 +48,50 @@ public class App {
                 case 0:
                     break;
                 case 1:
-                    //Get Vertex Count
-                    System.out.println("Vertex count: " + getVertexCount(g));
+                    //Get Person
+                    System.out.println("Person Vertex: " + getPerson(g));
                     break;
                 case 2:
-                    //Get Edge Count
-                    System.out.println("Edge count: " + getEdgeCount(g));
+                    //Add Person
+                    System.out.println("New person Vertex: " + addPerson(g));
                     break;
                 case 3:
-                    //Get Person
-                    System.out.println("person Vertex: " + getPerson(g));
+                    //Update Person
+                    System.out.println("Update person Vertex: " + updatePerson(g));
                     break;
                 case 4:
-                    //Add Person
-                    System.out.println("new person Vertex: " + addPerson(g));
-                    break;
-                case 5:
-                    //Update Person
-                    System.out.println("update person Vertex: " + updatePerson(g));
-                    break;
-                case 6:
                     //Delete Person
                     System.out.println(deletePerson(g));
                     break;
-                case 7:
+                case 5:
                     //Add Edge
-                    System.out.println(addIsFriendsWithEdge(g));
+                    System.out.println(addFriendsEdge(g));
                     break;
-                case 8:
+                case 6:
                     //Find Friends
                     System.out.println(getFriends(g));
                     break;
-                case 9:
+                case 7:
                     //Find Friends of Friends
                     System.out.println(getFriendsOfFriends(g));
                     break;
-                case 10:
+                case 8:
                     //findPathBetweenUsers
                     System.out.println(findPathBetweenPeople(g));
                     break;
-                case 11:
+                case 9:
                     //newest Restaurant Reviews
                     System.out.println(newestRestaurantReviews(g));
                     break;
-                case 12:
+                case 10:
                     //newest Restaurant Reviews
                     System.out.println(highestRatedRestaurants(g));
                     break;
-                case 13:
+                case 11:
                     //newest Restaurant Reviews
                     System.out.println(highestRatedByCuisine(g));
                     break;
-                case 14:
+                case 12:
                     //friends top 3 resturants for local city
                     findTop3FriendsRestaurantsForCity(cluster).forEach( r -> System.out.println(r.getObject().toString()));
                     break;
@@ -119,20 +111,18 @@ public class App {
         System.out.println();
         System.out.println("Main Menu:");
         System.out.println("--------------");
-        System.out.println("1) Get Count of the Vertices");
-        System.out.println("2) Get Count of the Edges");
-        System.out.println("3) Get person Vertex");
-        System.out.println("4) Add person Vertex");
-        System.out.println("5) Update person Vertex");
-        System.out.println("6) Delete person Vertex");
-        System.out.println("7) Add is_friends_with Edge");
-        System.out.println("8) Find your Friends");
-        System.out.println("9) Find the Friends of your Friends");
-        System.out.println("10) Find the path between two people");
-        System.out.println("11) Find the newest reviews for a restaurant");
-        System.out.println("12) What are the ten highest rated restaurants near me");
-        System.out.println("13) What restaurant near me, with a specific cuisine, is the highest rated");
-        System.out.println("14) What are my friends top three restaurants for a city");
+        System.out.println("1) Get person Vertex");
+        System.out.println("2) Add person Vertex");
+        System.out.println("3) Update person Vertex");
+        System.out.println("4) Delete person Vertex");
+        System.out.println("5) Add friends Edge");
+        System.out.println("6) Find your Friends");
+        System.out.println("7) Find the Friends of your Friends");
+        System.out.println("8) Find the path between two people");
+        System.out.println("9) Find the newest reviews for a restaurant");
+        System.out.println("10) What are the ten highest rated restaurants near me");
+        System.out.println("11) What restaurant near me, with a specific cuisine, is the highest rated");
+        System.out.println("12) What are my friends top three restaurants for a city");
         System.out.println("0) Quit");
         System.out.println("--------------");
         System.out.println("Enter your choice:");
@@ -153,22 +143,14 @@ public class App {
         return traversal().withRemote(DriverRemoteConnection.using(cluster));
     }
 
-    public static Long getVertexCount(GraphTraversalSource g) {
-        return g.V().count().next();
-    }
-
-    public static Long getEdgeCount(GraphTraversalSource g) {
-        return g.E().count().next();
-    }
-
     public static String getPerson(GraphTraversalSource g) {
         Scanner keyboard = new Scanner(System.in);
-        System.out.println("Enter the name for the person to find:");
+        System.out.println("Enter the first name for the person to find:");
         String name = keyboard.nextLine();
 
         //This returns a List of the properties
         List properties = g.V().
-                has("person", "name", name).
+                has("person", "first_name", name).
                 valueMap().toList();
 
         return properties.toString();
@@ -180,7 +162,7 @@ public class App {
         String name = keyboard.nextLine();
 
         //This returns a Vertex type
-        Vertex newVertex = g.addV("person").property("name", name).next();
+        Vertex newVertex = g.addV("person").property("first_name", name).next();
 
         return newVertex.toString();
     }
@@ -193,7 +175,7 @@ public class App {
         String newName = keyboard.nextLine();
 
         //This returns a Vertex type
-        Vertex vertex = g.V().has("person", "name", name).property("name", newName).next();
+        Vertex vertex = g.V().has("person", "first_name", name).property("first_name", newName).next();
         return vertex.toString();
     }
 
@@ -203,15 +185,17 @@ public class App {
         String name = keyboard.nextLine();
 
         //This returns a count of the vertices dropped
-        Long vertexCount = g.V().has("person", "name", name).
+        Long vertexCount = g.V().has("person", "first_name", name).
                 sideEffect(__.drop().iterate()).
                 count().
                 next();
 
+        g.V().has("person","first_name", name).drop().next();
+
         return vertexCount.toString();
     }
 
-    public static String addIsFriendsWithEdge(GraphTraversalSource g) {
+    public static String addFriendsEdge(GraphTraversalSource g) {
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Enter the name for the person to start the edge at:");
         String fromName = keyboard.nextLine();
@@ -219,8 +203,8 @@ public class App {
         String toName = keyboard.nextLine();
 
         //This returns an Edge type
-        Edge newEdge = g.V().has("person", "name", fromName)
-                .addE("is_friends_with").to(__.V().has("person", "name", toName))
+        Edge newEdge = g.V().has("person", "first_name", fromName)
+                .addE("friends").to(__.V().has("person", "first_name", toName))
                 .next();
 
         return newEdge.toString();
@@ -232,8 +216,8 @@ public class App {
         String name = keyboard.nextLine();
 
         //Returns a list of Objects representing the friend person vertex properties
-        List<Object> friends = g.V().has("person", "name", name).
-                both("is_friends_with").dedup().
+        List<Object> friends = g.V().has("person", "first_name", name).
+                both("friends").dedup().
                 values().
                 toList();
 
@@ -247,9 +231,9 @@ public class App {
 
         // Returns a List of Objects representing the vertex properties
         // of the friend of a friend person vertex
-        List<Object> foff = g.V().has("person", "name", name).
+        List<Object> foff = g.V().has("person", "first_name", name).
                 repeat(
-                        out("is_friends_with")
+                        out("friends")
                 ).times(2).dedup().values().toList();
 
         return StringUtils.join(foff, "\r\n");
@@ -264,10 +248,10 @@ public class App {
 
         // Returns a List of Path objects which represent
         // the path between the two person vertices
-        List<Path> friends = g.V().has("person", "name", fromName).
-                until(has("person", "name", toName)).
+        List<Path> friends = g.V().has("person", "first_name", fromName).
+                until(has("person", "first_name", toName)).
                 repeat(
-                        both("is_friends_with").simplePath()
+                        both("friends").simplePath()
                 ).path().toList();
 
         return StringUtils.join(friends, "\r\n");

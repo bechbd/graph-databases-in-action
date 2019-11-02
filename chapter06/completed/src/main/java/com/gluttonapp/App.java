@@ -157,6 +157,8 @@ public class App {
                count().
                next();
 
+        g.V().has("person","first_name", name).drop().next();
+
         return vertexCount.toString();
     }
 
@@ -167,7 +169,7 @@ public class App {
         System.out.println("Enter the name for the person to end the edge at:");
         String toName = keyboard.nextLine();
 
-        //This returns an Edge type
+             //This returns an Edge type
         Edge newEdge = g.V().has("person", "first_name", fromName)
                 .addE("friends").to(__.V().has("person", "first_name", toName))
                 .next();
