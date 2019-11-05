@@ -157,8 +157,6 @@ public class App {
                count().
                next();
 
-        g.V().has("person","first_name", name).drop().next();
-
         return vertexCount.toString();
     }
 
