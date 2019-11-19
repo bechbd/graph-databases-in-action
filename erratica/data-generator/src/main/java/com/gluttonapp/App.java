@@ -129,7 +129,7 @@ public class App {
         Vertex city = g.V(person).out("lives").next();
 
         List<Vertex> restaurants = g.V().hasLabel("restaurant").
-                where(out("located").is(city)).
+                where(out("within").is(city)).
                 order().by(shuffle).
                 toList();
 
@@ -170,18 +170,18 @@ public class App {
               unfold(),
               addV("restaurant").
                   property(single, "restaurant_id", Integer.parseInt(restaurant_id)).
-                  property(single, "restaurant_name", restaurant_name).
+                  property(single, "name", restaurant_name).
                   property(single, "address", faker.address().streetAddress())
             ).as("r").
-                addE("located").to(V().has("city","name",city)).
+                addE("within").to(V().has("city","name",city)).
             select("r").
             next();
 
         Vertex c = g.V().
-          has("cuisine", "cuisine_name", cuisine_name).fold().
+          has("cuisine", "name", cuisine_name).fold().
           coalesce(
               unfold(),
-              addV("cuisine").property(single, "cuisine_name", cuisine_name)
+              addV("cuisine").property(single, "name", cuisine_name)
             ).
           next();
 
@@ -242,7 +242,7 @@ public class App {
                     addV("city").property(single, "name", name)).
                 next();
 
-        g.V(returnVertex).addE("located").to(V(state)).iterate();
+        g.V(returnVertex).addE("within").to(V(state)).iterate();
 
         return returnVertex;
     }
