@@ -96,7 +96,7 @@ public class App {
                     System.out.println(highestRatedRestaurants(g));
                     break;
                 case 13:
-                    //newest Restaurant Reviews
+                    //highest rated Restaurnats by Cuisine
                     System.out.println(highestRatedByCuisine(g));
                     break;
                 case 14:
@@ -322,14 +322,14 @@ public class App {
         System.out.println("Enter the id for the person:");
         Integer personId = Integer.valueOf(keyboard.nextLine());
         System.out.println("Enter a comma separated list of cuisines:");
-        List<String> cuisine_list = Arrays.asList(keyboard.nextLine().split(","));
+        List<String> cuisineList = Arrays.asList(keyboard.nextLine().split(","));
         cuisine_list.replaceAll(String::trim);
 
         // Returns a Map of Objects containing the restaurant id and the review
         List<Map<String, Object>> restaurants = g.V().has("person", "person_id", personId).
                     out("lives").
                     in("within").
-                    where(out("serves").has("name", P.within(cuisine_list))).
+                    where(out("serves").has("name", P.within(cuisineList))).
                     group().
                         by(identity()).
                         by(__.in("about").values("rating").mean()).
