@@ -264,7 +264,7 @@ public class App {
 
         // Returns a Map of Objects containing the restaurant id and the review
         List<Map<Object, Object>> reviews = g.V().has("restaurant", "restaurant_id", restaurantId).
-                in("about_a").
+                in("about").
                 order().
                     by("created_date").
                 limit(3).
@@ -278,54 +278,55 @@ public class App {
     private static String highestRatedRestaurants(GraphTraversalSource g) {
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Enter the id for the user:");
-        Integer userId = Integer.valueOf(keyboard.nextLine());
+        Integer personId = Integer.valueOf(keyboard.nextLine());
 
         // Returns a Map of Objects containing the restaurant id and the review
-        List<Map<String, Object>> restaurants = g.V().has("user", "user_id", userId).
-                out("lives_in").
-                in("located_in").
+        List<Map<String, Object>> restaurants = g.V().has("person", "person_id", personId).
+                out("lives").
+                in("within").
                 group().
                     by(identity()).
-                    by(__.in("about_a").values("rating").mean()).
+                    by(__.in("about").values("rating").mean()).
                 order(local).
                     by(values, Order.desc).
                 limit(local, 10).
                 unfold().
-                project("restaurant_id", "restaurant_name", "address", "rating_average").
+                project("restaurant_id", "restaurant_name", "address", "rating_avg").
                     by(select(keys).values("restaurant_id")).
-                    by(select(keys).values("restaurant_name")).
+                    by(select(keys).values("name")).
                     by(select(keys).values("address")).
-                    by(select(values)).toList();
+                    by(select(values)).
+                toList();
 
         return StringUtils.join(restaurants, "\r\n");
     }
 
     private static String highestRatedByCuisine(GraphTraversalSource g) {
         Scanner keyboard = new Scanner(System.in);
-        System.out.println("Enter the id for the user:");
-        Integer userId = Integer.valueOf(keyboard.nextLine());
+        System.out.println("Enter the id for the person:");
+        Integer personId = Integer.valueOf(keyboard.nextLine());
         System.out.println("Enter a comma separated list of cuisines:");
-        List<String> cuisine_list = Arrays.asList(keyboard.nextLine().split(","));
+        List<String> cuisineList = Arrays.asList(keyboard.nextLine().split(","));
         cuisine_list.replaceAll(String::trim);
 
         // Returns a Map of Objects containing the restaurant id and the review
-        List<Map<String, Object>> restaurants = g.V().has("user", "user_id", userId).
-                    out("lives_in").
-                    in("located_in").
-                    where(out("serves").has("cuisine_name", P.within(cuisine_list))).
+        List<Map<String, Object>> restaurants = g.V().has("person", "person_id", personId).
+                    out("lives").
+                    in("within").
+                    where(out("serves").has("name", P.within(cuisineList))).
                     group().
                         by(identity()).
-                        by(__.in("about_a").values("rating").mean()).
+                        by(__.in("about").values("rating").mean()).
                     order(local).
                         by(values, Order.desc).
                         unfold().
                     limit(1).
                     project("restaurant_id", "restaurant_name", "address", "rating_average", "cuisine").
                         by(select(keys).values("restaurant_id")).
-                        by(select(keys).values("restaurant_name")).
+                        by(select(keys).values("name")).
                         by(select(keys).values("address")).
                         by(select(values)).
-                        by(select(keys).out("serves").values("cuisine_name")).toList();
+                        by(select(keys).out("serves").values("name")).toList();
 
         return StringUtils.join(restaurants, "\r\n");
     }
