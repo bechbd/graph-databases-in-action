@@ -1,4 +1,4 @@
-package com.gluttonapp;
+package com.diningbyfriends;
 
 import java.util.Scanner;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
@@ -81,7 +81,7 @@ public class App {
             }
         }
 
-        System.out.println("Exiting GluttonApp, Bye!");
+        System.out.println("Exiting DiningByFriends, Bye!");
     }
 
     public static int showMenu() {

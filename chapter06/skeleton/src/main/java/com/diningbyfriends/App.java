@@ -1,4 +1,4 @@
-package com.gluttonapp;
+package com.diningbyfriends;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
@@ -66,7 +66,7 @@ public class App {
             }
         }
 
-        System.out.println("Exiting GluttonApp, Bye!");
+        System.out.println("Exiting DiningByFriends, Bye!");
     }
 
     public static int showMenu() {
