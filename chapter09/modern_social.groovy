@@ -29,7 +29,7 @@ gremlin> m.V().valueMap(true)
   ==>{id=4, label=person, name=[josh], age=[32]}
   ==>{id=5, label=software, name=[ripple], lang=[java]}
   ==>{id=6, label=person, name=[peter], age=[35]}
-gremlin> m.V().has('person','name','josh').property('new',true)
+gremlin> m.V().has('person','first_name','josh').property('new',true)
   ==>v[4]
 gremlin> m.V().valueMap(true)
   ==>{id=1, label=person, name=[marko], age=[29]}

@@ -1,5 +1,5 @@
 // user (user_id, first_name, last_name)
-//   is_friends_with user
+//   friends user
 //   lives_in city
 //   wrote_a(review_date) review
 //   wrote_a review_rating

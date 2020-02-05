@@ -19,20 +19,20 @@ g.addE('works_with').from(dave).to(josh).
 g.V().fold().project('v','e').by(unfold().count()).by(unfold().outE().count())
 
 
-g.V().has('person','name','Josh').
-  until(has('person','name','Denise')).
+g.V().has('person','first_name','Josh').
+  until(has('person','first_name','Denise')).
   repeat(bothE('works_with').otherV().simplePath()).
   path()
 
-g.V().has('person','name','Josh').
+g.V().has('person','first_name','Josh').
   repeat(bothE('works_with').otherV()).times(2).path()
 
-g.V().has('person','name','Josh').
+g.V().has('person','first_name','Josh').
         repeat(bothE('works_with').otherV().simplePath()).times(2).path()
 
 
-g.V().has('person','name','Ted').
-  until(has('person', 'name', 'Denise')).
+g.V().has('person','first_name','Ted').
+  until(has('person', 'first_name', 'Denise')).
   emit().
   repeat(
     bothE('works_with').otherV().simplePath()
@@ -42,13 +42,13 @@ g.V().has('person','name','Ted').
 
 
 
-g.V().has('person','name','Ted').as('self').
+g.V().has('person','first_name','Ted').as('self').
     both().both().
     project('foff','f').
-      by('name').
+      by('first_name').
       by(
           both().where(
                         both().as('self')
                       ).
-          values('name')
+          values('first_name')
         )

@@ -1,7 +1,7 @@
 // Example 1: different vertex label for each contact type
 g.V().drop().iterate()
 
-g.addV('person').property('name','Ted').as('ted').
+g.addV('person').property('first_name','Ted').as('ted').
   addV('email').property('address','fake@fake.com').as('email').
     addE('has_email').from('ted').to('email').
   addV('phone').property('number','555-1212').as('phone').
@@ -12,11 +12,11 @@ g.addV('person').property('name','Ted').as('ted').
 
 g.V().groupCount().by(label)
 
-g.V().has('person', 'name', 'Ted').
+g.V().has('person', 'first_name', 'Ted').
         out('has_phone').
         values('number')
 
-g.V().has('person', 'name', 'Ted').
+g.V().has('person', 'first_name', 'Ted').
   union(
     out('has_phone').values('number'),
     out('has_email').values('address'),
@@ -34,7 +34,7 @@ g.V().
 // Example 2: single "contact" vertex label
 g.V().drop().iterate()
 
-g.addV('person').property('name','Ted').as('ted').
+g.addV('person').property('first_name','Ted').as('ted').
   addV('contact').
     property('type','email').
     property('address','fake@fake.com').as('email').
@@ -51,11 +51,11 @@ g.addV('person').property('name','Ted').as('ted').
 
 g.V().groupCount().by(label)
 
-g.V().has('person', 'name', 'Ted').
+g.V().has('person', 'first_name', 'Ted').
   out('has_phone').
   values('number')
 
-g.V().has('person', 'name', 'Ted').
+g.V().has('person', 'first_name', 'Ted').
   union(
     out('has_phone').values('number'),
     out('has_email').values('address'),
@@ -70,7 +70,7 @@ g.V().
 // Example 3: single "has_a" edge label
 g.V().drop().iterate()
 
-g.addV('person').property('name','Ted').as('ted').
+g.addV('person').property('first_name','Ted').as('ted').
     addV('contact').
       property('type','email').
       property('address','fake@fake.com').as('email').
@@ -87,12 +87,12 @@ g.addV('person').property('name','Ted').as('ted').
 
 g.V().groupCount().by(label)
 
-g.V().has('person', 'name', 'Ted').
+g.V().has('person', 'first_name', 'Ted').
   out('has_a').
   has('contact', 'type', 'phone').
   values('number')
 
-g.V().has('person', 'name', 'Ted').
+g.V().has('person', 'first_name', 'Ted').
   out('has_a').
   values('number', 'address')
 

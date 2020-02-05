@@ -23,6 +23,6 @@ g.V().has('person', 'first_name', 'Dave').
   ).times(2).values('first_name')
 
 
-g.V().has('person', 'name', 'Dave').
+g.V().has('person', 'first_name', 'Dave').
   out().as('f').
   out().as('foff').values('first_name')
