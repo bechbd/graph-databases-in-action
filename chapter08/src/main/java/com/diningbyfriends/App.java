@@ -1,4 +1,4 @@
-package com.gluttonapp;
+package com.diningbyfriends;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tinkerpop.gremlin.driver.Client;
@@ -100,7 +100,7 @@ public class App {
             }
         }
 
-        System.out.println("Exiting GluttonApp, Bye!");
+        System.out.println("Exiting DiningByFriends, Bye!");
     }
 
 
@@ -285,7 +285,7 @@ public class App {
                 out("lives").
                 in("within").
                 group().
-                    by(identity()).
+                    by(__.identity()).
                     by(__.in("about").values("rating").mean()).
                 order(local).
                     by(values, Order.desc).
@@ -307,7 +307,7 @@ public class App {
         Integer personId = Integer.valueOf(keyboard.nextLine());
         System.out.println("Enter a comma separated list of cuisines:");
         List<String> cuisineList = Arrays.asList(keyboard.nextLine().split(","));
-        cuisine_list.replaceAll(String::trim);
+        cuisineList.replaceAll(String::trim);
 
         // Returns a Map of Objects containing the restaurant id and the review
         List<Map<String, Object>> restaurants = g.V().has("person", "person_id", personId).
@@ -315,7 +315,7 @@ public class App {
                     in("within").
                     where(out("serves").has("name", P.within(cuisineList))).
                     group().
-                        by(identity()).
+                        by(__.identity()).
                         by(__.in("about").values("rating").mean()).
                     order(local).
                         by(values, Order.desc).
