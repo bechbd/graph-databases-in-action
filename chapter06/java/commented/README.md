@@ -1,5 +1,7 @@
 # DiningByFriends
 
+[Logo](../../../extras/dbflogo.png =250x)
+
 Companion application for ['Graph Databases in Action'][1] by Dave Bechberger & Josh Perryman
 
 Application is a Java console application. 
