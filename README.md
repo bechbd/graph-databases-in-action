@@ -1,7 +1,7 @@
 # Graph Databases in Action
 by Dave Bechberger, Josh Perryman
 
-![image](https://images.manning.com/360/480/resize/book/b/7825565-46a5-4846-b899-a0dfb64e54bb/Bechberger-GD-MEAP-HI.png =100x)
+![Logo](https://images.manning.com/360/480/resize/book/b/7825565-46a5-4846-b899-a0dfb64e54bb/Bechberger-GD-MEAP-HI.png)
 
 For each chapter, there are both scripts and code corresponding to the chapter. 
 
