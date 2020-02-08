@@ -1,4 +1,4 @@
-# Graph Databases in Action           |  <img src='https://images.manning.com/360/480/resize/book/b/7825565-46a5-4846-b899-a0dfb64e54bb/Bechberger-GD-MEAP-HI.png' width=125 height=170 />
+# Graph Databases in Action  <img src='https://images.manning.com/360/480/resize/book/b/7825565-46a5-4846-b899-a0dfb64e54bb/Bechberger-GD-MEAP-HI.png' width=125 height=170 />
 by Dave Bechberger, Josh Perryman
 
 For each chapter, there are both scripts and code corresponding to the chapter. 
