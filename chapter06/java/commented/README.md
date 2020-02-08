@@ -1,6 +1,4 @@
-# DiningByFriends
-
-[Logo](../../../extras/dbflogo.png =250x)
+# DiningByFriends <img src='https://github.com/bechbd/graph-databases-in-action/blob/master/extras/dbflogo.png' width=125 height=125 />
 
 Companion application for ['Graph Databases in Action'][1] by Dave Bechberger & Josh Perryman
 
