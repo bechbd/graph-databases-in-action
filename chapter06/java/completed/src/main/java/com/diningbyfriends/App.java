@@ -184,10 +184,10 @@ public class App {
         //Returns a list of Objects representing the friend person vertex properties
         List<Object> friends = g.V().has("person", "first_name", name).
                 both("friends").dedup().
-                values().
+                values("first_name").
                 toList();
 
-        return StringUtils.join(friends, "\r\n");
+        return StringUtils.join(friends, System.lineSeparator());
     }
 
     public static String getFriendsOfFriends(GraphTraversalSource g) {
@@ -200,9 +200,9 @@ public class App {
         List<Object> foff = g.V().has("person", "first_name", name).
                 repeat(
                         out("friends")
-                ).times(2).dedup().values().toList();
+                ).times(2).dedup().values("first_name").toList();
 
-        return StringUtils.join(foff, "\r\n");
+        return StringUtils.join(foff, System.lineSeparator());
     }
 
     public static String findPathBetweenPeople(GraphTraversalSource g) {
@@ -220,6 +220,6 @@ public class App {
                         both("friends").simplePath()
                 ).path().toList();
 
-        return StringUtils.join(friends, "\r\n");
+        return StringUtils.join(friends, System.lineSeparator());
     }
 }
