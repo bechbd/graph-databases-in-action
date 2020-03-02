@@ -2,41 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f4f910f7-b8f2-415e-8b79-53780941e111" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../../chapter03/create_simple_social_network.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter03/upgrade_simple_to_complex_social_network.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter04/add_works_with_edges_and_properties.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter04/recreate_simple_network_variables.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter04/upgrade_simple_to_complex_social_network.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter06/commented/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter06/commented/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter06/commented/src/main/java/com/diningbyfriends/App.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter06/completed/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter06/completed/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter06/completed/src/main/java/com/diningbyfriends/App.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter06/skeleton/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter06/skeleton/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter06/skeleton/src/main/java/com/diningbyfriends/App.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter07/label_examples.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter08/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter08/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter08/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter08/query1.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter08/query2.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter08/query3.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter08/resturant-review-network.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter08/scratch1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter08/src/main/java/com/diningbyfriends/App.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter08/supert_extended_graph.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../modern_social.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../query1_profile.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../query_scratch.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../sample.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../scratch.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../temp.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter10/query1_refactor.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter10/scratch2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../chapter11/centrality_algorithms.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../erratica/console-scripts/restaurant-review-network-io.groovy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../chapter04/scripts/4.1.3-upgrade_simple_to_complex_social_network.groovy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../chapter08/java/commented/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../chapter08/java/commented/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -51,15 +19,12 @@
     <option name="delegatedBuild" value="true" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/diningbyfriends/App.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="352">
-              <caret line="110" column="50" lean-forward="true" selection-start-line="110" selection-start-column="50" selection-end-line="110" selection-end-column="50" />
-              <folding>
-                <element signature="e#13705#15853#0" />
-              </folding>
+              <caret line="110" column="50" selection-start-line="110" selection-start-column="50" selection-end-line="110" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -169,6 +134,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="settings.editor.selected.configurable" value="com.neueda.jetbrains.plugin.graphdb.jetbrains.configuration.GraphDatabaseSupportConfiguration" />
@@ -239,17 +205,12 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1057" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info id="Designer" />
-      <window_info id="UI Designer" />
-      <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24973376" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2550586" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Graph Database Console" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" />
+      <window_info id="Designer" order="2" />
+      <window_info id="UI Designer" order="3" />
+      <window_info id="Favorites" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -257,23 +218,24 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Palette" />
-      <window_info anchor="right" id="Palette&#9;" />
-      <window_info anchor="right" id="Graph Database" />
-      <window_info anchor="right" id="Maven" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Graph Database Console" order="8" />
+      <window_info anchor="bottom" id="Terminal" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Graph Database" order="4" />
+      <window_info anchor="right" id="Maven" order="5" />
+      <window_info anchor="right" id="Palette&#9;" order="6" />
     </layout>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/main/java/com/diningbyfriends/App.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="352">
-          <caret line="110" column="50" lean-forward="true" selection-start-line="110" selection-start-column="50" selection-end-line="110" selection-end-column="50" />
-          <folding>
-            <element signature="e#13705#15853#0" />
-          </folding>
+          <caret line="110" column="50" selection-start-line="110" selection-start-column="50" selection-end-line="110" selection-end-column="50" />
         </state>
       </provider>
     </entry>

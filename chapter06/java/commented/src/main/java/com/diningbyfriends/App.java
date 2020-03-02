@@ -124,9 +124,13 @@ public class App {
 //    }
 
 // TODO: 6.2
-//    public static GraphTraversalSource getGraphTraversalSource(Cluster cluster) {
-//        return traversal().withRemote(DriverRemoteConnection.using(cluster));
-//    }
+    public static GraphTraversalSource getGraphTraversalSource(Cluster cluster) {
+        return traversal().
+                withRemote(
+                DriverRemoteConnection.using(
+                        cluster
+                ));
+    }
 
 // TODO: 6.3.1
 //    public static String getPerson(GraphTraversalSource g) {
