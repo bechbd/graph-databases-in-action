@@ -153,7 +153,7 @@ public class App {
 
         //This returns a count of the vertices dropped
        Long vertexCount = g.V().has("person", "first_name", name).
-               sideEffect(__.drop().iterate()).
+               sideEffect(__.drop()).
                count().
                next();
 
@@ -183,7 +183,7 @@ public class App {
 
         //Returns a list of Objects representing the friend person vertex properties
         List<Object> friends = g.V().has("person", "first_name", name).
-                both("friends").dedup().
+                out("friends").dedup().
                 values("first_name").
                 toList();
 
