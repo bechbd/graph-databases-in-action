@@ -179,7 +179,7 @@ public class App {
 //        String name = keyboard.nextLine();
 //
 //        //This returns a count of the vertices dropped
-//   //    Long vertexCount = g.V().has("person","first_name", name).sideEffect(__.drop().iterate()).count().next();
+//   //    Long vertexCount = g.V().has("person","first_name", name).sideEffect(__.drop()).count().next();
 //
 //        Object vertexCount = g.V().has("person","first_name", name).
 //                sideEffect(__.count().store("x")).
@@ -197,9 +197,10 @@ public class App {
 //        String toName = keyboard.nextLine();
 //
 //        //This returns an Edge type
-//        Edge newEdge = g.V().has("person", "first_name", fromName)
-//                .addE("friends").to(__.V().has("person", "first_name", toName))
-//                .next();
+//        Edge newEdge = g.addE("friends").
+//                from(__.V().has("person","first_name", fromName)).
+//                to(__.V().has("person","first_name",toName)).
+//                next();
 //
 //        return newEdge.toString();
 //    }
@@ -212,10 +213,10 @@ public class App {
 //
 //        //Returns a list of Objects representing the friend person vertex properties
 //        List<Object> friends = g.V().has("person", "first_name", name).
-//                both("friends").dedup().
-//                values().toList();
+//                out("friends").dedup().
+//                values("first_name").toList();
 //
-//        return StringUtils.join(friends, "\r\n");
+//        return StringUtils.join(friends, System.lineSeparator());
 //    }
 
 // TODO: 6.5.2
@@ -228,9 +229,10 @@ public class App {
 //        List<Object> foff = g.V().has("person", "first_name", name).
 //                repeat(
 //                        out("friends")
-//                ).times(2).dedup().values().toList();
+//                ).times(2).dedup().
+//                values("first_name").toList();
 //
-//        return StringUtils.join(foff, "\r\n");
+//        return StringUtils.join(foff, System.lineSeparator());
 //    }
 
 // TODO: 6.5.3
@@ -248,6 +250,6 @@ public class App {
 //                        both("friends").simplePath()
 //                ).path().toList();
 //
-//        return StringUtils.join(friends, "\r\n");
+//        return StringUtils.join(friends, System.lineSeparator());
 //    }
 }

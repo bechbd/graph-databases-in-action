@@ -168,10 +168,10 @@ public class App {
         String toName = keyboard.nextLine();
 
         //This returns an Edge type
-        Edge newEdge = g.addE("friends")
-                .from(__.V().has("person","first_name", fromName))
-                .to(__.V().has("person","first_name",toName))
-                .next();
+        Edge newEdge = g.addE("friends").
+                from(__.V().has("person","first_name", fromName)).
+                to(__.V().has("person","first_name",toName)).
+                next();
 
         return newEdge.toString();
     }
@@ -200,7 +200,8 @@ public class App {
         List<Object> foff = g.V().has("person", "first_name", name).
                 repeat(
                         out("friends")
-                ).times(2).dedup().values("first_name").toList();
+                ).times(2).dedup().
+                values("first_name").toList();
 
         return StringUtils.join(foff, System.lineSeparator());
     }
