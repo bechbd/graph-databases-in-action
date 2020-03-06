@@ -153,7 +153,7 @@ public class App {
 
         //This returns a count of the vertices dropped
        Long vertexCount = g.V().has("person", "first_name", name).
-               sideEffect(__.drop().iterate()).
+               sideEffect(__.drop()).
                count().
                next();
 
@@ -167,10 +167,11 @@ public class App {
         System.out.println("Enter the name for the person to end the edge at:");
         String toName = keyboard.nextLine();
 
-             //This returns an Edge type
-        Edge newEdge = g.V().has("person", "first_name", fromName)
-                .addE("friends").to(__.V().has("person", "first_name", toName))
-                .next();
+        //This returns an Edge type
+        Edge newEdge = g.addE("friends").
+                from(__.V().has("person","first_name", fromName)).
+                to(__.V().has("person","first_name",toName)).
+                next();
 
         return newEdge.toString();
     }
@@ -182,11 +183,11 @@ public class App {
 
         //Returns a list of Objects representing the friend person vertex properties
         List<Object> friends = g.V().has("person", "first_name", name).
-                both("friends").dedup().
-                values().
+                out("friends").dedup().
+                values("first_name").
                 toList();
 
-        return StringUtils.join(friends, "\r\n");
+        return StringUtils.join(friends, System.lineSeparator());
     }
 
     public static String getFriendsOfFriends(GraphTraversalSource g) {
@@ -199,9 +200,10 @@ public class App {
         List<Object> foff = g.V().has("person", "first_name", name).
                 repeat(
                         out("friends")
-                ).times(2).dedup().values().toList();
+                ).times(2).dedup().
+                values("first_name").toList();
 
-        return StringUtils.join(foff, "\r\n");
+        return StringUtils.join(foff, System.lineSeparator());
     }
 
     public static String findPathBetweenPeople(GraphTraversalSource g) {
@@ -219,6 +221,6 @@ public class App {
                         both("friends").simplePath()
                 ).path().toList();
 
-        return StringUtils.join(friends, "\r\n");
+        return StringUtils.join(friends, System.lineSeparator());
     }
 }
