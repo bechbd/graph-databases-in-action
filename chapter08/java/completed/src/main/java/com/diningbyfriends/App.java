@@ -146,7 +146,7 @@ public class App {
         //This returns a List of the properties
         List properties = g.V().
                 has("person", "first_name", name).
-                valueMap().toList();
+                valueMap("first_name").toList();
 
         return properties.toString();
     }
@@ -181,11 +181,9 @@ public class App {
 
         //This returns a count of the vertices dropped
         Long vertexCount = g.V().has("person", "first_name", name).
-                sideEffect(__.drop().iterate()).
+                sideEffect(__.drop()).
                 count().
                 next();
-
-        g.V().has("person","first_name", name).drop().next();
 
         return vertexCount.toString();
     }
@@ -213,10 +211,10 @@ public class App {
         //Returns a list of Objects representing the friend person vertex properties
         List<Object> friends = g.V().has("person", "first_name", name).
                 both("friends").dedup().
-                values().
+                values("first_name").
                 toList();
 
-        return StringUtils.join(friends, "\r\n");
+        return StringUtils.join(friends, System.lineSeparator());
     }
 
     public static String getFriendsOfFriends(GraphTraversalSource g) {
@@ -229,9 +227,10 @@ public class App {
         List<Object> foff = g.V().has("person", "first_name", name).
                 repeat(
                         out("friends")
-                ).times(2).dedup().values().toList();
+                ).times(2).dedup().
+                values("first_name").toList();
 
-        return StringUtils.join(foff, "\r\n");
+        return StringUtils.join(foff, System.lineSeparator());
     }
 
     public static String findPathBetweenPeople(GraphTraversalSource g) {
@@ -247,9 +246,10 @@ public class App {
                 until(has("person", "first_name", toName)).
                 repeat(
                         both("friends").simplePath()
-                ).path().toList();
+                ).path().
+                toList();
 
-        return StringUtils.join(friends, "\r\n");
+        return StringUtils.join(friends, System.lineSeparator());
     }
 
     private static String newestRestaurantReviews(GraphTraversalSource g) {
@@ -267,7 +267,7 @@ public class App {
                     with(WithOptions.tokens).toList();
 
 
-        return StringUtils.join(reviews, "\r\n");
+        return StringUtils.join(reviews, System.lineSeparator());
     }
 
     private static String highestRatedRestaurants(GraphTraversalSource g) {
@@ -293,7 +293,7 @@ public class App {
                     by(select(values)).
                 toList();
 
-        return StringUtils.join(restaurants, "\r\n");
+        return StringUtils.join(restaurants, System.lineSeparator());
     }
 
     private static String highestRatedByCuisine(GraphTraversalSource g) {
@@ -323,6 +323,6 @@ public class App {
                         by(select(values)).
                         by(select(keys).out("serves").values("name")).toList();
 
-        return StringUtils.join(restaurants, "\r\n");
+        return StringUtils.join(restaurants, System.lineSeparator());
     }
 }
