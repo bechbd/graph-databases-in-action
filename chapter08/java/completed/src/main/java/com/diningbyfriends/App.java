@@ -279,15 +279,15 @@ public class App {
         List<Map<String, Object>> restaurants = g.V().has("person", "person_id", personId).
                 out("lives").
                 in("within").
+                where(inE('about')).
                 group().
-                    by(__.identity()).
+                    by(identity()).
                     by(__.in("about").values("rating").mean()).
-                order(local).
-                    by(values, Order.desc).
-                limit(local, 10).
                 unfold().
-                project("restaurant_id", "restaurant_name", "address", "rating_avg").
-                    by(select(keys).values("restaurant_id")).
+                order().
+                    by(values, Order.desc).
+                limit(10).
+                project("name", "address", "rating_avg").
                     by(select(keys).values("name")).
                     by(select(keys).values("address")).
                     by(select(values)).
@@ -309,19 +309,20 @@ public class App {
                     out("lives").
                     in("within").
                     where(out("serves").has("name", P.within(cuisineList))).
+                    where(inE("about")).
                     group().
-                        by(__.identity()).
+                        by(identity()).
                         by(__.in("about").values("rating").mean()).
-                    order(local).
+                    unfold().
+                    order().
                         by(values, Order.desc).
-                        unfold().
                     limit(1).
-                    project("restaurant_id", "restaurant_name", "address", "rating_average", "cuisine").
-                        by(select(keys).values("restaurant_id")).
+                    project("restaurant_name", "address", "rating_average", "cuisine").
                         by(select(keys).values("name")).
                         by(select(keys).values("address")).
                         by(select(values)).
-                        by(select(keys).out("serves").values("name")).toList();
+                        by(select(keys).out("serves").values("name")).
+                    toList();
 
         return StringUtils.join(restaurants, System.lineSeparator());
     }

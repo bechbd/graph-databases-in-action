@@ -1,4 +1,4 @@
-package com.gluttonapp;
+package com.diningbyfriends;
 
 import com.github.javafaker.Faker;
 import com.opencsv.CSVReader;
