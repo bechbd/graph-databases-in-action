@@ -3,7 +3,7 @@
 
 g.V().drop().iterate()
 
-full_path_and_filename = "/path/to/restaurant-review-network.json"
+full_path_and_filename = "/Users/josh/dev/bechbd/graph-databases-in-action/chapter09/scripts/restaurant-review-network.json"
 
 g.io(full_path_and_filename).
   with(IO.reader,IO.graphson).

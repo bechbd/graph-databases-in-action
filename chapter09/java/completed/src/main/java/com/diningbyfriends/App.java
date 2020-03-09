@@ -151,7 +151,8 @@ public class App {
         //This returns a List of the properties
         List properties = g.V().
                 has("person", "first_name", name).
-                valueMap().toList();
+                valueMap("first_name").
+                toList();
 
         return properties.toString();
     }
@@ -190,8 +191,6 @@ public class App {
                 count().
                 next();
 
-        g.V().has("person","first_name", name).drop().next();
-
         return vertexCount.toString();
     }
 
@@ -218,10 +217,10 @@ public class App {
         //Returns a list of Objects representing the friend person vertex properties
         List<Object> friends = g.V().has("person", "first_name", name).
                 both("friends").dedup().
-                values().
+                values("first_name").
                 toList();
 
-        return StringUtils.join(friends, "\r\n");
+        return StringUtils.join(friends, System.lineSeparator());
     }
 
     public static String getFriendsOfFriends(GraphTraversalSource g) {
@@ -234,9 +233,11 @@ public class App {
         List<Object> foff = g.V().has("person", "first_name", name).
                 repeat(
                         out("friends")
-                ).times(2).dedup().values().toList();
+                ).times(2).dedup().
+                values("first_name").
+                toList();
 
-        return StringUtils.join(foff, "\r\n");
+        return StringUtils.join(foff, System.lineSeparator());
     }
 
     public static String findPathBetweenPeople(GraphTraversalSource g) {
@@ -252,9 +253,10 @@ public class App {
                 until(has("person", "first_name", toName)).
                 repeat(
                         both("friends").simplePath()
-                ).path().toList();
+                ).path().
+                toList();
 
-        return StringUtils.join(friends, "\r\n");
+        return StringUtils.join(friends, System.lineSeparator());
     }
 
     private static String newestRestaurantReviews(GraphTraversalSource g) {
@@ -272,7 +274,7 @@ public class App {
                     with(WithOptions.tokens).toList();
 
 
-        return StringUtils.join(reviews, "\r\n");
+        return StringUtils.join(reviews, System.lineSeparator());
     }
 
     private static String highestRatedRestaurants(GraphTraversalSource g) {
@@ -284,21 +286,21 @@ public class App {
         List<Map<String, Object>> restaurants = g.V().has("person", "person_id", personId).
                 out("lives").
                 in("within").
+                where(inE('about')).
                 group().
-                    by(__.identity()).
+                    by(identity()).
                     by(__.in("about").values("rating").mean()).
-                order(local).
-                    by(values, Order.desc).
-                limit(local, 10).
                 unfold().
-                project("restaurant_id", "restaurant_name", "address", "rating_avg").
-                    by(select(keys).values("restaurant_id")).
+                order().
+                    by(values, Order.desc).
+                limit(10).
+                project("name", "address", "rating_avg").
                     by(select(keys).values("name")).
                     by(select(keys).values("address")).
                     by(select(values)).
                 toList();
 
-        return StringUtils.join(restaurants, "\r\n");
+        return StringUtils.join(restaurants, System.lineSeparator());
     }
 
     private static String highestRatedByCuisine(GraphTraversalSource g) {
@@ -314,21 +316,21 @@ public class App {
                     out("lives").
                     in("within").
                     where(out("serves").has("name", P.within(cuisineList))).
+                    where(inE("about")).
                     group().
-                        by(__.identity()).
+                        by(identity()).
                         by(__.in("about").values("rating").mean()).
-                    order(local).
+                    unfold().
+                    order().
                         by(values, Order.desc).
-                        unfold().
                     limit(1).
-                    project("restaurant_id", "restaurant_name", "address", "rating_average", "cuisine").
-                        by(select(keys).values("restaurant_id")).
+                    project("name", "address", "rating_average", "cuisine").
                         by(select(keys).values("name")).
                         by(select(keys).values("address")).
                         by(select(values)).
                         by(select(keys).out("serves").values("name")).toList();
 
-        return StringUtils.join(restaurants, "\r\n");
+        return StringUtils.join(restaurants, System.lineSeparator());
     }
 
     private static List<Result> findTop3FriendsRestaurantsForCity(Cluster cluster) {
