@@ -286,7 +286,7 @@ public class App {
         List<Map<String, Object>> restaurants = g.V().has("person", "person_id", personId).
                 out("lives").
                 in("within").
-                where(inE('about')).
+                where(inE("about")).
                 group().
                     by(identity()).
                     by(__.in("about").values("rating").mean()).
