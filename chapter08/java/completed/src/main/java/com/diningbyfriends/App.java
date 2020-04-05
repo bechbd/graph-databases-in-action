@@ -261,7 +261,7 @@ public class App {
         List<Map<Object, Object>> reviews = g.V().has("restaurant", "restaurant_id", restaurantId).
                 in("about").
                 order().
-                    by("created_date").
+                    by("created_date", Order.desc).
                 limit(3).
                 valueMap("rating", "created_date", "body").
                     with(WithOptions.tokens).toList();
