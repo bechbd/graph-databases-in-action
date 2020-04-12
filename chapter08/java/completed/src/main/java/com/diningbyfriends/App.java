@@ -1,30 +1,26 @@
 package com.diningbyfriends;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
-import org.apache.tinkerpop.gremlin.driver.Result;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
+import org.apache.tinkerpop.gremlin.process.traversal.Order;
+import org.apache.tinkerpop.gremlin.process.traversal.P;
 import org.apache.tinkerpop.gremlin.process.traversal.Path;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
 import org.apache.tinkerpop.gremlin.process.traversal.step.util.WithOptions;
 import org.apache.tinkerpop.gremlin.structure.Edge;
-import org.apache.tinkerpop.gremlin.process.traversal.*;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
-import static org.apache.tinkerpop.gremlin.process.traversal.Contains.within;
-import static org.apache.tinkerpop.gremlin.process.traversal.Scope.*;
 import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.*;
-import static org.apache.tinkerpop.gremlin.structure.Column.*;
+import static org.apache.tinkerpop.gremlin.structure.Column.keys;
+import static org.apache.tinkerpop.gremlin.structure.Column.values;
 
 public class App {
 
@@ -261,7 +257,7 @@ public class App {
         List<Map<Object, Object>> reviews = g.V().has("restaurant", "restaurant_id", restaurantId).
                 in("about").
                 order().
-                    by("created_date").
+                    by("created_date", Order.desc).
                 limit(3).
                 valueMap("rating", "created_date", "body").
                     with(WithOptions.tokens).toList();
@@ -279,7 +275,7 @@ public class App {
         List<Map<String, Object>> restaurants = g.V().has("person", "person_id", personId).
                 out("lives").
                 in("within").
-                where(inE('about')).
+                where(inE("about")).
                 group().
                     by(identity()).
                     by(__.in("about").values("rating").mean()).
