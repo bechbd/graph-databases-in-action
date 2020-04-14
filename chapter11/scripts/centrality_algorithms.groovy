@@ -1,9 +1,9 @@
 //Degree Centrality
-g.V().group().by(values('first_name')).by(bothE().count())
+g.V().hasLabel('person').group().by(values('first_name')).by(bothE('friends').count())
 
 //Betweeness Centrality
-g.V().as("v").
-           repeat(both().simplePath().as("v")).emit(). 
+g.V().hasLabel('person').as("v").
+           repeat(both('friends').simplePath().as("v")).emit(). 
            filter(project("x","y","z").by(select(first, "v")). 
                                        by(select(last, "v")).
                                        by(select(all, "v").count(local)).as("triple").
@@ -18,8 +18,8 @@ g.V().as("v").
            group().by(valueMap()).by(count()).next()
 
 //Closeness Centrality
-g.withSack(1f).V().as("v"). 
-           repeat(both().simplePath().as("v")).emit().
+g.withSack(1f).V().hasLabel('person').as("v"). 
+           repeat(both('friends').simplePath().as("v")).emit().
            filter(project("x","y","z").by(select(first, "v")). 
                                        by(select(last, "v")).
                                        by(select(all, "v").count(local)).as("triple").
@@ -30,11 +30,12 @@ g.withSack(1f).V().as("v").
                            store("triples")). 
                   select("z").as("length").
                   select("triple").select("z").where(eq("length"))). 
-           group().by(select(first, "v")). 
+           group().by(select(first, "v").values('first_name')). 
                    by(select(all, "v").count(local).sack(div).sack().sum()).next()
 
+
 //Eigenvector Centrality
-g.V().repeat(groupCount('m').by('first_name').out()).times(5).cap('m'). 
+g.V().hasLabel('person').repeat(groupCount('m').by('first_name').out('friends')).times(5).cap('m'). 
            order(local).by(values, desc).limit(local, 10).next()
 
 //PageRank
