@@ -39,4 +39,4 @@ g.V().hasLabel('person').repeat(groupCount('m').by('first_name').out('friends'))
            order(local).by(values, desc).limit(local, 10).next()
 
 //PageRank
-g.withComputer().V().pageRank().by('pageRank').valueMap()
+g.withComputer().V().hasLabel('person').pageRank().by('pageRank').valueMap()
