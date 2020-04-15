@@ -346,12 +346,11 @@ public class App {
         params.put("city",city);
 
         String defineSubgraph = "subgraph = g.V()." +
-                "has('user','first_name', name)." +
+                "has('person','first_name', name)." +
                 "bothE().subgraph('sg').otherV()." +
                 "outE('wrote').subgraph('sg').inV()." +
                 "optional(outE('about').subgraph('sg').inV())." +
-                "outE('about').subgraph('sg').inV()." +
-                "outE('located').subgraph('sg')." +
+                "outE('within').subgraph('sg')." +
                 "cap('sg').next(); null";
 
         client.submit(defineSubgraph, params);
@@ -362,7 +361,7 @@ public class App {
 
         String findTopLocalRestaurants = "sg.V()." +
                 "has('city','name',city)." +
-                "in('located')." +
+                "in('within')." +
                 "where(__.in('about'))." +
                 "group()." +
                   "by(identity())." +
@@ -373,7 +372,7 @@ public class App {
                 "limit(3)." +
                 "project('restaurant_id','restaurant_name','address','rating_average')." +
                   "by(select(keys).values('restaurant_id'))." +
-                  "by(select(keys).values('restaurant_name'))." +
+                  "by(select(keys).values('name'))." +
                   "by(select(keys).values('address'))." +
                   "by(select(values))";
 
