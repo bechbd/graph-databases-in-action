@@ -287,12 +287,12 @@ public class App {
                 where(inE("about")).
                 group().
                     by(identity()).
-                    by(__.in("about").values("rating").mean()).
+                    by(in("about").values("rating").mean()).
                 unfold().
                 order().
                     by(values, Order.desc).
                 limit(10).
-                project("name", "address", "rating_avg").
+                project("name", "address", "rating_average").
                     by(select(keys).values("name")).
                     by(select(keys).values("address")).
                     by(select(values)).
@@ -318,7 +318,7 @@ public class App {
                     where(inE("about")).
                     group().
                         by(identity()).
-                        by(__.in("about").values("rating").mean()).
+                        by(in("about").values("rating").mean()).
                     unnfold()
                     order().
                         by(values, Order.desc).

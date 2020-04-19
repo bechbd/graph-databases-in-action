@@ -278,7 +278,7 @@ public class App {
                 where(inE("about")).
                 group().
                     by(identity()).
-                    by(__.in("about").values("rating").mean()).
+                    by(in("about").values("rating").mean()).
                 unfold().
                 order().
                     by(values, Order.desc).
@@ -308,7 +308,7 @@ public class App {
                     where(inE("about")).
                     group().
                         by(identity()).
-                        by(__.in("about").values("rating").mean()).
+                        by(in("about").values("rating").mean()).
                     unfold().
                     order().
                         by(values, Order.desc).
